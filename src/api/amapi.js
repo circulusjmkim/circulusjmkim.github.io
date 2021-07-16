@@ -1,4 +1,4 @@
-import { POST, GET, PUT, PATCH, DELETE, encodeGetParams, setAPI,  } from './common';
+import { POST, GET, PATCH, DELETE, encodeGetParams, setAPI,  } from './common';
 
 const getFetchResult = async (route, method, data) => {
   const { url, headers } = setAPI(route, method, data);

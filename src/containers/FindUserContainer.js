@@ -2,11 +2,9 @@ import React, { Fragment, useEffect, useState } from 'react';
 import moment from 'moment';
 import { FormControl, RadioGroup, FormControlLabel, TextField, Radio, Chip, Grid, makeStyles, Typography, Button, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Divider, useMediaQuery } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import { findUserList } from '../api/amapi';
-import { SEARCH_CONDITIONS } from '../core/utils/consts';
 import EnvSelect from '../components/EnvSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { setChipData, setList, setSearchType, setConditions, findList} from '../features/find';
+import { setChipData, setSearchType, setConditions, findList} from '../features/find';
 import { Pagination } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
@@ -110,7 +108,7 @@ const FindUserContainer = () => {
   const small = useMediaQuery('(max-width:600px)');
   const dispatch = useDispatch();
   const selector = useSelector(state => state.find);
-  const { searchConditions, chipData, userList, radio, page, skip, limit, totalPage } = selector;
+  const { searchConditions, chipData, userList, radio, limit, totalPage } = selector;
   const [label, setLabel] = useState('사용자의 ObjectId 또는 userId를 입력하세요.');
   const [words, setWords] = useState('');
 
@@ -121,7 +119,6 @@ const FindUserContainer = () => {
       const index = parseInt(j, 10);
       const idx = parseInt(k, 10);
       const i = parseInt(l, 10);
-      const item = searchConditions[index].list[idx].list[i];
       const list = searchConditions[index].list[idx].list.map((item, itemIdx) => {
         if(i === itemIdx) {
           return {...item, selected: !item.selected};

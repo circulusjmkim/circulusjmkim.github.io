@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Container, Grid, makeStyles, useMediaQuery } from '@material-ui/core';
 import FullWidthTabs from '../components/FullWidthTabs';
 import { MENUS } from '../core/utils/consts';
