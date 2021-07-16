@@ -1,0 +1,44 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "rules": {
+    // "react/prefer-stateless-function": 0,
+    // "react/jsx-filename-extension": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "no-bitwise": "off",
+    "react/prop-types": "off",
+    "react/prefer-stateless-function": "off",
+    "linebreak-style": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/require-default-props": [
+      0,
+      {
+        "forbidDefaultForRequired": false,
+        "forbid": [
+          "object"
+        ],
+        "checkContextTypes": false,
+        "checkChildContextTypes": false,
+        "allowRequiredDefaults": true
+      }
+    ]
+  }
+}
