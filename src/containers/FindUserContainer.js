@@ -92,6 +92,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '300px',
     maxWidth: '300px',
     width: '100%',
+    marginBottom: theme.spacing(2),
   },
   marginVertical: {
     margin: 'auto 0',
