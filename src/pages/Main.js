@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: -1,
+    animation: 'ease 1s ease-in-out 1s',
     '&::before': {
       content: "''",
       position: 'absolute',
