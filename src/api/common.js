@@ -1,9 +1,9 @@
 // import axios from 'axios';
 
 // const SITE_URL = 'http://localhost:3000/';
-// const API_URL = `http://192.168.1.165:57703/v1/admin/`;
 const SITE_URL = 'https://circulusjmkim.github.io/';
-const API_URL = `https://${localStorage.getItem('env')}-mapi.circul.us/v1/admin/`
+// const API_URL = `http://0.0.0.0:57703/v1/admin/`;
+const API_URL = `https://${localStorage.getItem('env') || 'ops'}-mapi.circul.us/v1/admin/`
 const publishDate = '2107161406';
 
 export const POST = 'POST';

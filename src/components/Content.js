@@ -7,6 +7,7 @@ import SubList from './SubList';
 
 const Content = ({ tab, item, classes, handleListItemClick, children }) => {
   const mobileMatches = useMediaQuery('(max-height: 900px)');
+  const [list, setList] = useState(MENUS[tab].list);
   const [fold, setFold] = useState(null);
 
   const handleFoldClick = () => {
@@ -17,11 +18,15 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
     setFold(mobileMatches);
   }, [mobileMatches]);
 
+  useEffect(() => {
+    setList(MENUS[tab].list);
+  }, [tab]);
+
   return (
     <Grid container direction="row" justifyContent="center" alignItems="stretch">
       <Grid item xs={12} sm={4} md={3} lg={2}>
         {
-          MENUS[tab].list.map(({ value, label }, i) => (
+          list.map(({ value, label }, i) => (
             <SubList {...{key: `${value}-${i}`, index: i, label, classes, value, selected: item === i, fold, onChange: handleListItemClick}} />
           ))
         }
@@ -33,7 +38,7 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
       </Grid>
       <Grid item xs={12} sm={8} md={9} lg={10}>
         <div className={classes.content}>
-          <Typography variant="subtitle2" gutterBottom>{MENUS[tab].list[item].desc}</Typography>
+          <Typography variant="subtitle2" gutterBottom>{list[item].desc}</Typography>
           <div>{children}</div>
         </div>
       </Grid>
