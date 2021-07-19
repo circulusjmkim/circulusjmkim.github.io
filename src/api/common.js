@@ -3,7 +3,7 @@
 // const SITE_URL = 'http://localhost:3000/';
 const SITE_URL = 'https://circulusjmkim.github.io/';
 // const API_URL = `http://0.0.0.0:57703/v1/admin/`;
-const API_URL = `https://${localStorage.getItem('env') || 'ops'}-mapi.circul.us/v1/admin/`
+const API_URL = () => `https://${localStorage.getItem('env') || 'ops'}-mapi.circul.us/v1/admin/`
 const publishDate = '2107161406';
 
 export const POST = 'POST';
@@ -18,7 +18,7 @@ export const encodeGetParams = (p) =>
     .join('&');
 
 export const setAPI = (path, method, body) => {
-  const url = `${API_URL}${path}`;
+  const url = `${API_URL()}${path}`;
   const headers =
     method === GET && body && 'token' in body
       ? {
