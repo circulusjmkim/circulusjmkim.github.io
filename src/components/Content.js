@@ -4,6 +4,7 @@ import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import { MENUS } from '../core/utils/consts';
 import SubList from './SubList';
+import ContentDescription from './ContentDescription';
 
 const Content = ({ tab, item, classes, handleListItemClick, children }) => {
   const mobileMatches = useMediaQuery('(max-height: 900px)');
@@ -38,7 +39,7 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
       </Grid>
       <Grid item xs={12} sm={8} md={9} lg={10}>
         <div className={classes.content}>
-          <Typography variant="subtitle2" gutterBottom>{list[item].desc}</Typography>
+          <ContentDescription desc={list[item].desc} />
           <div>{children}</div>
         </div>
       </Grid>
