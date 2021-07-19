@@ -1,11 +1,12 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Fragment, useEffect, useState } from 'react';
 import moment from 'moment';
 import { FormControl, RadioGroup, FormControlLabel, TextField, Radio, Chip, Grid, makeStyles, Typography, Button, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody, Divider, useMediaQuery } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { Pagination } from '@material-ui/lab';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import EnvSelect from '../components/EnvSelect';
-import { useDispatch, useSelector } from 'react-redux';
 import { setChipData, setSearchType, setConditions, findList} from '../features/find';
-import { Pagination } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '300px',
     maxWidth: '300px',
     width: '100%',
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
   marginVertical: {
@@ -142,7 +144,7 @@ const FindUserContainer = () => {
         if(key === 'verified') {
           newArgs[key] = 'all';
         } else {
-          //모두 선택일 경우 선택사항으로 넘겨주지 않도록 처리
+          // 모두 선택일 경우 선택사항으로 넘겨주지 않도록 처리
           newArgs = Object.entries(newArgs).reduce((acc, [k, v]) => {
             if(k !== key) {
               return {...acc, [k]:v};
@@ -196,7 +198,7 @@ const FindUserContainer = () => {
         const findItem = current.list.filter(item => item.selected);
         if(findItem) {
           return findItem.reduce((x, y) => {
-            let arr = [...x];
+            const arr = [...x];
             arr.push({...y, key: current.value});
             return arr;
           }, [...accumulate]);
@@ -222,9 +224,9 @@ const FindUserContainer = () => {
       spacing={2}
     >
       {
-        searchConditions.map(({key, label, list}, index) => (
+        searchConditions.map(({key, label: l, list}, index) => (
         <Fragment key={key}>
-          <Grid item xs={2} sm={1} className={classes.searchName}>{label}</Grid>
+          <Grid item xs={2} sm={1} className={classes.searchName}>{l}</Grid>
           <Grid item xs={10} sm={11} className={classes.conditions}>
           {
             list.map(({ item, value, list: items}, idx) => (
@@ -272,8 +274,7 @@ const FindUserContainer = () => {
         </Grid>
       </Grid>
       <Divider style={{width: '100%'}} />
-      <Grid item xs={12}>
-      </Grid>
+      <Grid item xs={12} />
       {userList && (<Grid item xs={12}>
         <TableContainer component={Paper} className={classes.table}>
           <Table size={small?'small':'medium'} className={classes.table} aria-label="user list table">

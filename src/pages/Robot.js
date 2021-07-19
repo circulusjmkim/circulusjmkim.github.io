@@ -7,11 +7,11 @@ import RobotClearDataContainer from '../containers/RobotClearDataContainer';
 const Robot = () => {
   const { item } = useSelector(state => state.page);
 
-  return (<Fragment>
+  return (<>
     {item === 0 && <RobotDisconnContainer /> }
     {item === 1 && <RobotTransferDataContainer /> }
     {item === 2 && <RobotClearDataContainer /> }
-  </Fragment>);
+  </>);
 };
 
 export default Robot;

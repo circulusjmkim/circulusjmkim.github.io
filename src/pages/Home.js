@@ -4,8 +4,6 @@ import { Container, makeStyles, Typography } from '@material-ui/core';
 // import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 // import { useHistory } from 'react-router';
 
-import BgLogo from '../assets/bg_logo.png';
-
 const useHomeStyle = makeStyles((theme) => ({
   root: {
     width: '100%',

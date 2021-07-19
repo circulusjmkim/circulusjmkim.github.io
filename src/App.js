@@ -12,9 +12,7 @@ import Redis from './pages/Redis';
 import Notice from './pages/Notice';
 
 
-const App = () => {
-
-  return (
+const App = () => (
       <ThemeProvider theme={themeType(true)}>
         <BrowserRouter>
           <CssBaseline />
@@ -31,6 +29,5 @@ const App = () => {
         </BrowserRouter>
       </ThemeProvider>
   );
-};
 
 export default App;

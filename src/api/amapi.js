@@ -28,6 +28,10 @@ export const updateUserPassword = async ({ userId, newPw }) => {
   return result;
 };
 
+export const findRobot = async ({ robot }) => {
+  const result = await getFetchResult(`findRobot?${encodeGetParams({ robot })}`, GET);
+  return result;
+};
 export const findRobotByUser = async ({ user, robot }) => {
   const result = await getFetchResult(`findUserRobot?${encodeGetParams({ user, robot })}`, GET);
   return result;

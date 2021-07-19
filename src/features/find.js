@@ -44,7 +44,9 @@ const findSlice = createSlice({
   reducers: {
     init: () => ({...initialState }),
     setConditions: (state, {payload: {index, idx, list} }) => {
+      // eslint-disable-next-line no-param-reassign
       state.searchConditions[index].list[idx].list = list;
+      // eslint-disable-next-line no-unused-expressions
       ({...state, searchConditions: state.searchConditions});
     },
     setList: (state, action) => ({...state, ...action.payload }),
