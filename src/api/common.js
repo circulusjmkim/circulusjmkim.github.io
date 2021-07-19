@@ -3,7 +3,7 @@
 // const SITE_URL = 'http://localhost:3000/';
 const SITE_URL = 'https://circulusjmkim.github.io/';
 // const API_URL = `http://0.0.0.0:57703/v1/admin/`;
-const API_URL = () => `https://${localStorage.getItem('env') || 'ops'}-mapi.circul.us/v1/admin/`
+const API_URL = (env) => env ? `https://${env}-mapi.circul.us/v1/admin/` : `https://ops-mapi.circul.us/v1/admin/`;
 const publishDate = '2107161406';
 
 export const POST = 'POST';
@@ -18,7 +18,9 @@ export const encodeGetParams = (p) =>
     .join('&');
 
 export const setAPI = (path, method, body) => {
-  const url = `${API_URL()}${path}`;
+  const env = localStorage.getItem('env');
+  const url = `${API_URL(env)}${path}`;
+  console.log(env, url);
   const headers =
     method === GET && body && 'token' in body
       ? {
@@ -105,7 +107,7 @@ const getMobileOS = () => {
 export async function getFile(data) {
   if (!data) return `${SITE_URL}image/img_thumb.png`;
   const cacheName = `assets-${publishDate}`;
-  const url = `${API_URL}file?${encodeGetParams(data)}`;
+  const url = `${API_URL()}file?${encodeGetParams(data)}`;
   const [key] = Object.keys(data);
   const exceptCase =
     getMobileOS() === 'iOS' || key === 'diary' || key === 'userPhoto';
