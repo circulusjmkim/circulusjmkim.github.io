@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import FindUserContainer from '../containers/FindUserContainer';
 import { useSelector } from 'react-redux';
+import FindUserContainer from '../containers/FindUserContainer';
 
 const Find = () => {
   const { item } = useSelector(state => state.page);
