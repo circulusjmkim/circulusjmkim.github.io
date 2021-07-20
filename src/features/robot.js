@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { disconnectRobotBySerial, findRobot } from "../api/amapi";
+import { disconnectRobotBySerial, transferRobotData, findRobot, clearRobotData } from "../api/amapi";
 // import { findRobot } from "../api/amapi";
 
 export const getRobot = createAsyncThunk(
@@ -37,8 +37,26 @@ export const getRobot = createAsyncThunk(
   },
 );
 
+export const clearRobot = createAsyncThunk(
+  'robot/CLEAR',
+  async (serial, { rejectWithValue }) => {
+    try {
+      const { result, error } = await clearRobotData({ serial });
+      if(result) {
+        return result;
+      }
+      if(error && 'code' in error && 'desc' in error) {
+        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
+      }
+      return rejectWithValue(`😥 데이터 클리어 실패`);
+    } catch (error) {
+      return rejectWithValue(`${JSON.stringify(error)}:😥 데이터 클리어 실패`);
+    }
+  },
+);
+
 export const disconnectRobot = createAsyncThunk(
-  'robot/DICONNECT',
+  'robot/DISCONNECT',
   async (serial, { rejectWithValue }) => {
     try {
       const { result, error } = await disconnectRobotBySerial({ serial });
@@ -55,18 +73,40 @@ export const disconnectRobot = createAsyncThunk(
   },
 );
 
+export const transfertData = createAsyncThunk(
+  'robot/TRANSFER',
+  async ({ userId, serial, newSerial }, { rejectWithValue }) => {
+    try {
+      const { result, error } = await transferRobotData({ userId, serial, newSerial });
+      if(result) {
+        return result;
+      }
+      if(error && 'code' in error && 'desc' in error) {
+        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
+      }
+      return rejectWithValue(`😥 데이터 이전 실패`);
+    } catch (error) {
+      return rejectWithValue(`${JSON.stringify(error)}:😥 데이터 이전 실패`);
+    }
+  }
+);
+
 const initialState = {
   robotData: [],
   findError: '',
+  clearResult: null,
+  clearError: '',
   disconnResult: null,
   disconnError: '',
+  transferResult: null,
+  transferError: '',
 };
 
 const robotSlice = createSlice({
   name: 'robot',
   initialState,
   reducers: {
-    disconnectInitial: () => ({...initialState }),
+    robotInitialize: () => ({...initialState }),
   },
   extraReducers: {
     [getRobot.pending.type]: state => ({ ...state, findError: ''}),
@@ -90,10 +130,32 @@ const robotSlice = createSlice({
       disconnResult: false,
       disconnError: action.payload,
     }),
+    [clearRobot.pending.type]: state => ({ ...state, clearResult: null, clearError: ''}),
+    [clearRobot.fulfilled.type]: (state, action) => ({
+      ...state,
+      clearError: '',
+      clearResult: action.payload,
+    }),
+    [clearRobot.rejected.type]: (state, action) => ({
+      ...state,
+      clearResult: false,
+      clearError: action.payload,
+    }),
+    [transfertData.pending.type]: state => ({ ...state, transferResult: null, transferError: ''}),
+    [transfertData.fulfilled.type]: (state, action) => ({
+      ...state,
+      transferError: '',
+      transferResult: action.payload,
+    }),
+    [transfertData.rejected.type]: (state, action) => ({
+      ...state,
+      transferResult: false,
+      transferError: action.payload,
+    }),
   }
 });
 
 const { reducer: robotReducer, actions } = robotSlice;
-export const { disconnectInitial } = actions;
+export const { robotInitialize } = actions;
 
 export default robotReducer;

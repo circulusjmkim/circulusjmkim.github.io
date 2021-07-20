@@ -7,7 +7,7 @@ import EnvSelect from '../components/EnvSelect';
 import { robotInitialize, disconnectRobot, getRobot } from '../features/robot';
 import { useStyles } from '../styles/robotStyle';
 
-const RobotDisconnContainer = () => {
+const RobotConnContainer = () => {
   const [words, setWords] = useState('');
   const dispatch = useDispatch();
   const selector = useSelector(state => state.robot);
@@ -167,4 +167,4 @@ const RobotDisconnContainer = () => {
   )
 };
 
-export default RobotDisconnContainer;
+export default RobotConnContainer;
