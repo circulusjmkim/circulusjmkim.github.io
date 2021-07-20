@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, IconButton, Typography, Divider, useMediaQuery } from '@material-ui/core';
+import { Grid, IconButton, Divider, useMediaQuery } from '@material-ui/core';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import { MENUS } from '../core/utils/consts';
@@ -7,7 +7,7 @@ import SubList from './SubList';
 import ContentDescription from './ContentDescription';
 
 const Content = ({ tab, item, classes, handleListItemClick, children }) => {
-  const mobileMatches = useMediaQuery('(max-height: 900px)');
+  const mobileMatches = useMediaQuery('(max-height:767px)');
   const [list, setList] = useState(MENUS[tab].list);
   const [fold, setFold] = useState(null);
 

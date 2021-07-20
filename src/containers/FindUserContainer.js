@@ -254,10 +254,10 @@ const FindUserContainer = () => {
           <Divider style={{width: '100%'}} />
         </Fragment>))
       }
-      <Grid item xs={2} sm={1} className={classes.marginVertical}>
+      <Grid item xs={6} md={2} className={classes.marginVertical}>
         <EnvSelect />
       </Grid>
-      <Grid container item xs={10} sm={11} style={{display: 'inline-flex'}}>
+      <Grid container item xs={12} md={10} style={{display: 'inline-flex'}}>
         <FormControl component="fieldset" className={classes.form}>
           <Grid item>
             <RadioGroup aria-label="type" name="findType" value={radio} onChange={handleRadioChange}>
