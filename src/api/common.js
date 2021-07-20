@@ -20,7 +20,6 @@ export const encodeGetParams = (p) =>
 export const setAPI = (path, method, body) => {
   const env = localStorage.getItem('env');
   const url = `${API_URL(env)}${path}`;
-  console.log(env, url);
   const headers =
     method === GET && body && 'token' in body
       ? {

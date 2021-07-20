@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Divider, List, ListItem, ListItemText } from '@material-ui/core';
 
 const SubList = ({ index, selected, label, fold, classes, onChange }) => {
@@ -6,7 +6,7 @@ const SubList = ({ index, selected, label, fold, classes, onChange }) => {
     onChange(newValue);
   };
   return (
-    <Fragment>
+    <>
       {(!fold || (fold && selected)) &&
         <div
           className={classes.list}
@@ -20,7 +20,7 @@ const SubList = ({ index, selected, label, fold, classes, onChange }) => {
           <Divider />
         </div>
       }
-    </Fragment>
+    </>
 )};
 
 export default SubList;

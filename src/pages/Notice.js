@@ -6,10 +6,10 @@ import NoticeUpdateContainer from '../containers/NoticeUpdateContainer';
 const Notice = () => {
   const { item } = useSelector(state => state.page);
 
-  return (<Fragment>
+  return (<>
     {item === 0 && <NoticeAddContainer /> }
     {item === 1 && <NoticeUpdateContainer /> }
-  </Fragment>);
+  </>);
 };
 
 export default Notice;

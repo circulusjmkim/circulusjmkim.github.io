@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
@@ -37,7 +38,7 @@ const Header = ({title}) => {
   const history = useHistory();
   return (
   <Grid item xs={12}>
-    <div className={classes.logo} onClick={() => history.push('/')}>
+    <div className={classes.logo} role="button" onClick={() => history.push('/')} aria-hidden="true">
       <img alt="Circulus" src="/logo_circulus.png"/>
       <Typography variant="h3">{title}</Typography>
     </div>

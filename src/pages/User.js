@@ -9,13 +9,13 @@ import UserSignupContainer from '../containers/UserSignupContainer';
 const User = () => {
   const { item } = useSelector(state => state.page);
 
-  return (<Fragment>
+  return (<>
     {item === 0 && <UserUpdatePasswordContainer /> }
     {item === 1 && <UserUpdateVerifiedContainer /> }
     {item === 2 && <UserClearDataContainer /> }
     {item === 3 && <UserUpdateBAKDataContainer /> }
     {item === 4 && <UserSignupContainer /> }
-  </Fragment>);
+  </>);
 };
 
 export default User;

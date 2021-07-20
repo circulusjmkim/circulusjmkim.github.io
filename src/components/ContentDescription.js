@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography } from '@material-ui/core';
 
 const ContentDescription = ({ desc }) => {
@@ -9,11 +9,11 @@ const ContentDescription = ({ desc }) => {
   }, [desc]);
 
   return (
-  <Fragment>
+  <>
   {
     descArr.map(description => <Typography variant="subtitle2" gutterBottom>{description}</Typography>)
   }
-  </Fragment>
+  </>
   );
 };
 

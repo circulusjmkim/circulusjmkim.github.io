@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
@@ -61,7 +63,7 @@ const FullWidthTabs = ({ list, onChange, value, classes }) => {
             aria-label="full width tabs"
           >
             {
-              list.map(({ label, value }, i) => (<Tab {...{...a11yProps(i), label, key: value}} />))
+              list.map(({ label, value:v }, i) => (<Tab {...{...a11yProps(i), label, key: v}} />))
             }
           </Tabs>
         </AppBar>
@@ -71,7 +73,7 @@ const FullWidthTabs = ({ list, onChange, value, classes }) => {
           onChangeIndex={handleChangeIndex}
         >
           {
-            list.map(({value, label}, index) => <TabPanel {...{value, index, dir:theme.direction, key:value}}>{label}</TabPanel>)
+            list.map(({value: v, label}, index) => <TabPanel {...{value: v, index, dir:theme.direction, key:v}}>{label}</TabPanel>)
           }
         </SwipeableViews>
       </div>

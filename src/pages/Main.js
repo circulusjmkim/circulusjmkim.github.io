@@ -1,13 +1,13 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Grid, makeStyles, useMediaQuery } from '@material-ui/core';
+import { useHistory } from 'react-router';
+import { useLocation } from 'react-use';
+import { useDispatch, useSelector } from 'react-redux';
 import FullWidthTabs from '../components/FullWidthTabs';
 import { MENUS } from '../core/utils/consts';
 import Header from '../components/Header';
 import SubHeader from '../components/SubHeader';
 import Content from '../components/Content';
-import { useHistory } from 'react-router';
-import { useLocation } from 'react-use';
-import { useDispatch, useSelector } from 'react-redux';
 import { setItem, setTab, setHome } from '../features/page';
 import BgLogo from '../assets/bg_logo.png';
 
@@ -176,15 +176,15 @@ const Main = ({ children }) => {
         <Grid container>
           <Header {...{title: 'Admin Control'}} style={{zIndex: '1500'}} />
           <FullWidthTabs {...{list: MENUS, value: tab, classes, onChange: handleTabChange}} />
-          {home && <Fragment>{children}</Fragment>}
+          {home && <>{children}</>}
           {
             tab > -1 && (
-              <Fragment>
+              <>
                 {(!home || smMatches) && <SubHeader {...{classes, desc: MENUS[tab].desc}} />}
                 {!home && <Content {...{tab, item, classes, handleListItemClick}}>
                   {children}
                 </Content>}
-              </Fragment>
+              </>
             )
           }
         </Grid>
