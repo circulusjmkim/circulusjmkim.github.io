@@ -21,6 +21,14 @@ export const useStyles = makeStyles((theme) => ({
       transform: 'translate(0, -4.5px) scale(0.75)'
     }
   },
+  smallTextField: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    '& .MuiInputLabel-shrink': {
+      transform: 'translate(0, -4.5px) scale(0.75)'
+    }
+  },
   cardTextField: {
     minWidth: '300px',
     width: '100%',
@@ -62,5 +70,10 @@ export const useStyles = makeStyles((theme) => ({
   cardError: {
     width: '100%',
     maxWidth: 'fit-content',
+  },
+  roleChip: {
+    fontSize: theme.typography.pxToRem(10),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   }
 }));

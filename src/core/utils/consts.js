@@ -15,7 +15,7 @@ const MENUS = [
       {value: 'robot_conn', label: '로봇 연결', desc: '로봇과 사용자를 관리자가 임의로 등록합니다.' },
       {value: 'robot_disconn', label: '로봇 연결 해제', desc: '로봇의 물리적 또는 논리적 아이디로 해당 로봇의 사용자(user, manager)와의 연결을 해제합니다.' },
       {value: 'robot_transfer_data', label: '로봇 데이터 이전', desc: '로봇의 시리얼 번호가 변경되었을 경우 새로운 시리얼로 기존 정보를 이용할 수 있도록 데이터를 이전합니다.' },
-      {value: 'robot_clear_data', label: '로봇 데이터 클리어', desc: '로봇의 물리적 또는 논리적 아이디와 관련된 모든 데이터(설치된 bot 정보, bot의 모든 연관 데이터(Optional))를 삭제합니다.\n*테스트 데이터 삭제에만 사용할 것을 권장합니다.' },
+      {value: 'robot_clear_data', label: '로봇 데이터 클리어', desc: '로봇의 물리적 또는 논리적 아이디와 관련된 모든 데이터(설치된 bot 정보, bot의 모든 연관 데이터(Optional))를 초기화합니다.\n*테스트 데이터 계정에서만 사용할 것을 권장합니다.' },
     ]
   },
   {
@@ -120,9 +120,20 @@ const SEARCH_CONDITIONS = [
       }
     ]
   },
-]
+];
+
+const MANAGER_ROLE = '2211';
+const ROBOT_MENU_CONNECT = 0;
+const ROBOT_MENU_DISCONNECT = 1;
+const ROBOT_MENU_TRANSFER = 2;
+const ROBOT_MENU_CLEAR = 3;
 
 export {
   MENUS, 
   SEARCH_CONDITIONS,
+  MANAGER_ROLE,
+  ROBOT_MENU_CONNECT,
+  ROBOT_MENU_DISCONNECT,
+  ROBOT_MENU_TRANSFER,
+  ROBOT_MENU_CLEAR,
 };

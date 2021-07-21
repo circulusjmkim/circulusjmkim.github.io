@@ -8,6 +8,10 @@ const getFetchResult = async (route, method, data) => {
   return result;
 };
 
+export const connectRobotBySerial = async ({ userId, serial }) => {
+  const result = await getFetchResult(`robotConnect`, POST, { userId, serial });
+  return result;
+};
 export const disconnectRobotBySerial = async ({ serial }) => {
   const result = await getFetchResult(`robotDisconnect`, PATCH, { serial });
   return result;
@@ -49,6 +53,11 @@ export const clearRobotData = async ({ serial }) => {
 
 export const transferRobotData = async ({ userId, serial, newSerial }) => {
   const result = await getFetchResult(`replaceRobot`, POST, { userId, serial, newSerial });
+  return result;
+};
+
+export const findUserForRobotConnect = async ({ userId }) => {
+  const result = await getFetchResult(`findUserByUserId?${encodeGetParams({userId})}`, GET);
   return result;
 };
 

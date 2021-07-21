@@ -1,53 +1,45 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Grid, Button, TextField, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, InputAdornment, IconButton } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import ClearIcon from '@material-ui/icons/Clear';
-import { useMount } from 'react-use';
+import { useMount, useUpdateEffect } from 'react-use';
 import EnvSelect from '../components/EnvSelect';
-import { getRobot, robotInitialize, transfertData } from '../features/robot';
+import { initialize, findClick, textChange, clearClick, transfertData } from '../features/robot';
 import { useStyles } from '../styles/robotStyle';
 
 const RobotTransferDataContainer = () => {
   const classes = useStyles();
-  const [beforeSerial, setBeforeSerial] = useState('');
-  const [afterSerial, setAfterSerial] = useState('');
   const dispatch = useDispatch();
   const selector = useSelector(state => state.robot);
-  const { findError, robotData, transferResult, transferError } = selector;
-
-  const handleTextChange = (e) => {
-    const { target: { name, value}} = e;
-    if(name === 'before') {
-      setBeforeSerial(value);
-    }
-    if(name === 'after') {
-      setAfterSerial(value);
-    }
-  };
-
-  const handleClickClear = (e) => {
-    const { target: { name }} = e;
-    if(name === 'before') {
-      setBeforeSerial('');
-      dispatch(robotInitialize());
-    }
-    if(name === 'after') {
-      setAfterSerial('');
-    }
-  }
+  const { dataError, data, result, error, params } = selector;
+  const { beforeSerial, afterSerial } = params;
 
   const handleFindClick = () => {
-    dispatch(getRobot(beforeSerial));
+    dispatch(findClick());
   };
+
+  const handleTextChange = (e) => {
+    dispatch(textChange(e));
+  };
+
+  const handleClickClear = (name) => () => {
+    dispatch(clearClick(name));
+  }
 
   const handleTransferClick = (userId) => () => {
     dispatch(transfertData({ serial: beforeSerial, newSerial: afterSerial, userId }));
   };
 
+  useUpdateEffect(() => {
+    if(result) {
+      setTimeout(() => {
+        dispatch(initialize());
+      }, 2000);
+    }
+  }, [result]);
+
   useMount(() => {
-    setBeforeSerial('');
-    setAfterSerial('');
-    dispatch(robotInitialize());
+    dispatch(initialize());
   });
 
   return (
@@ -65,12 +57,12 @@ const RobotTransferDataContainer = () => {
           <Grid item>
             <TextField
               id="beforeSerial"
-              name="before"
+              name="beforeSerial"
               className={classes.textField} 
               label='정보 이전을 위한 로봇의 ObjectId 또는 Serial No.를 입력하세요.'
               onChange={handleTextChange} 
-              value={beforeSerial}
-              error={findError}
+              value={beforeSerial || ''}
+              error={dataError}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -78,7 +70,7 @@ const RobotTransferDataContainer = () => {
                 endAdornment: (<InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickClear}
+                  onClick={handleClickClear('beforeSerial')}
                 >
                   <ClearIcon />
                 </IconButton>
@@ -90,11 +82,11 @@ const RobotTransferDataContainer = () => {
             <Button variant="contained" color="primary"  onClick={handleFindClick}>검색</Button>
           </Grid>
         </Grid>
-        {findError && (<Grid item xs={12}>
-          <Typography variant="h6">{findError}</Typography>
+        {dataError && (<Grid item xs={12}>
+          <Typography variant="h6">{dataError}</Typography>
         </Grid>)}
         <Grid container item xs={12}>
-          {robotData.map(({_id: id, robotId, userId, }) => (
+          {data.map(({_id: id, robotId, userId, }) => (
             <Grid item>
               <Card className={classes.cardRoot} key={id}>
                 <CardContent>
@@ -133,15 +125,15 @@ const RobotTransferDataContainer = () => {
                     </TableBody>
                   </Table>
                   {
-                    !transferResult && (
+                    !result && (
                       <TextField
                         id="afterSerial"
-                        name="after"
+                        name="afterSerial"
                         className={classes.cardTextField} 
                         label='새로운 로봇의 ObjectId 또는 Serial No.를 입력하세요.'
                         onChange={handleTextChange} 
                         value={afterSerial}
-                        error={findError}
+                        error={dataError}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -149,7 +141,7 @@ const RobotTransferDataContainer = () => {
                           endAdornment: (<InputAdornment position="end">
                           <IconButton
                             aria-label="toggle password visibility"
-                            onClick={handleClickClear}
+                            onClick={handleClickClear('afterSerial')}
                           >
                             <ClearIcon />
                           </IconButton>
@@ -159,13 +151,13 @@ const RobotTransferDataContainer = () => {
                     )
                   }
                   {
-                    (transferError || transferResult) && (
+                    (error || result) && (
                       <Typography variant="subtitle1">
                         {
-                          transferResult === false && <Typography variant="body2" color="textSecondary" className={classes.cardError}>{transferError}</Typography>
+                          result === false && <Typography variant="body2" color="textSecondary" className={classes.cardError}>{error}</Typography>
                         }
                         {
-                          transferResult && !transferError && (
+                          result && !error && (
                             <>
                               <p>{`${beforeSerial} 로봇의 데이터가 ${afterSerial}`}</p>
                               <p>로봇에 이전되었습니다.</p>
@@ -177,7 +169,7 @@ const RobotTransferDataContainer = () => {
                   }
                 </CardContent>
                 {
-                  !transferResult && (
+                  !result && (
                     <CardActions>
                       <Button size="small" color="secondary" className={classes.btn} onClick={handleTransferClick(userId)}>데이터 이전</Button>
                     </CardActions>

@@ -1,47 +1,45 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Button, TextField, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, InputAdornment, IconButton } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMount, useUpdateEffect } from 'react-use';
 import ClearIcon from '@material-ui/icons/Clear';
 import EnvSelect from '../components/EnvSelect';
-import { robotInitialize, disconnectRobot, getRobot } from '../features/robot';
+import { initialize, findClick, textChange, clearClick, disconnectRobot } from '../features/robot';
 import { useStyles } from '../styles/robotStyle';
 
 const RobotClearDataContainer = () => {
-  const [words, setWords] = useState('');
   const dispatch = useDispatch();
   const selector = useSelector(state => state.robot);
-  const { findError, robotData, clearResult, clearError } = selector;
-  // const { findError } = selector;
+  const { dataError, data, result, error, params } = selector;
+  const { words } = params;
+  // const { dataError } = selector;
   const classes = useStyles();
 
   const handleFindClick = () => {
-    dispatch(getRobot(words));
+    dispatch(findClick());
   };
 
   const handleTextChange = (e) => {
-    setWords(e.target.value);
+    dispatch(textChange(e));
+  };
+
+  const handleClickClear = (e) => {
+    dispatch(clearClick(e));
   };
 
   const handleDisconnectClick = (serial) => () => {
     dispatch(disconnectRobot(serial));
   };
 
-  const handleClickClear = () => {
-    setWords('');
-    dispatch(robotInitialize());
-  }
-
   useUpdateEffect(() => {
-    if(clearResult) {
+    if(result) {
       setTimeout(() => {
-        setWords('');
-        dispatch(robotInitialize());
+        dispatch(initialize());
       }, 2000);
     }
-  }, [clearResult]);
+  }, [result]);
 
-  useMount(() => dispatch(robotInitialize()));
+  useMount(() => dispatch(initialize()));
 
   return (
     <Grid container
@@ -61,8 +59,8 @@ const RobotClearDataContainer = () => {
               className={classes.textField} 
               label='로봇의 ObjectId 또는 Serial No.를 입력하세요.'
               onChange={handleTextChange} 
-              value={words}
-              error={findError}
+              value={words || ''}
+              error={dataError}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -82,16 +80,16 @@ const RobotClearDataContainer = () => {
             <Button variant="contained" color="primary"  onClick={handleFindClick}>검색</Button>
           </Grid>
         </Grid>
-        {findError && (<Grid item xs={12}>
-          <Typography variant="h6">{findError}</Typography>
+        {dataError && (<Grid item xs={12}>
+          <Typography variant="h6">{dataError}</Typography>
         </Grid>)}
         <Grid container item xs={12}>
-          {robotData.map(({_id: id, robotId, userId, }) => (
+          {data.map(({_id: id, robotId, userId, }) => (
             <Grid item>
               <Card className={classes.cardRoot} key={id}>
                 <CardContent>
                   {
-                    !clearResult && (
+                    !result && (
                       <Table size="small">
                         <TableBody>
                           <TableRow>
@@ -129,7 +127,7 @@ const RobotClearDataContainer = () => {
                   }
                   <Typography variant="subtitle1">
                     {
-                      clearResult === null && (
+                      result === null && (
                       <>
                         <p>{`해당 시리얼의 ${robotId} 로봇`}</p>
                         <p>데이터를 모두 삭제하시겠습니까?</p>
@@ -137,10 +135,10 @@ const RobotClearDataContainer = () => {
                       )
                     }
                     {
-                      clearResult === false && <Typography variant="body2" color="textSecondary" className={classes.cardError}>{clearError}</Typography>
+                      result === false && <Typography variant="body2" color="textSecondary" className={classes.cardError}>{error}</Typography>
                     }
                     {
-                      clearResult && !clearError && (
+                      result && !error && (
                         <>
                           <p>{`${robotId} 시리얼 로봇의`}</p>
                           <p>데이터가 모두 삭제되었습니다.</p>
@@ -148,12 +146,12 @@ const RobotClearDataContainer = () => {
                         )
                     }
                   </Typography>
-                  {clearResult && !clearError && (
+                  {result && !error && (
                     <Typography variant="body2" color="textSecondary">해당 카드는 자동으로 사라집니다.</Typography>
                   )}
                 </CardContent>
                 {
-                  !clearResult && (
+                  !result && (
                     <CardActions>
                       <Button size="small" className={classes.btnDisconnect} onClick={handleDisconnectClick(robotId)}>데이터 클리어</Button>
                     </CardActions>

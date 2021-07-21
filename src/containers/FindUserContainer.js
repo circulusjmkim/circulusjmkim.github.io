@@ -175,7 +175,9 @@ const FindUserContainer = () => {
   };
 
   const handleTextChange = (e) => {
-    setWords(e.target.value);
+    const { target: { value: v} } = e;
+    const value = v.replace(/[^a-zA-Z\d]/g, '');
+    setWords(value);
   };
 
   const handlePageChange = (e, v) => {

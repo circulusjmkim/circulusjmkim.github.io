@@ -1,47 +1,54 @@
-import React, { useState } from 'react';
-import { Grid, Button, TextField, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, InputAdornment, IconButton } from '@material-ui/core';
+import React from 'react';
+import { Grid, Button, TextField, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, InputAdornment, IconButton, Chip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMount, useUpdateEffect } from 'react-use';
 import ClearIcon from '@material-ui/icons/Clear';
 import EnvSelect from '../components/EnvSelect';
-import { robotInitialize, disconnectRobot, getRobot } from '../features/robot';
+import { initialize, findClick, textChange, clearClick, connectRobot } from '../features/robot';
 import { useStyles } from '../styles/robotStyle';
+import { MANAGER_ROLE } from '../core/utils/consts';
 
 const RobotConnContainer = () => {
-  const [words, setWords] = useState('');
   const dispatch = useDispatch();
   const selector = useSelector(state => state.robot);
-  const { findError, robotData, disconnResult, disconnError } = selector;
-  // const { findError } = selector;
+  const { dataError, data, result, error, params } = selector;
+  const { userId, robotId } = params;
   const classes = useStyles();
 
   const handleFindClick = () => {
-    dispatch(getRobot(words));
+    dispatch(findClick());
   };
 
   const handleTextChange = (e) => {
-    setWords(e.target.value);
+    dispatch(textChange(e));
   };
 
-  const handleDisconnectClick = (serial) => () => {
-    dispatch(disconnectRobot(serial));
-  };
-
-  const handleClickClear = () => {
-    setWords('');
-    dispatch(robotInitialize());
+  const handleClickClear = (name) => () => {
+    dispatch(clearClick(name));
   }
 
+  const handleConnectClick = () => {
+    dispatch(connectRobot({ serial: robotId, userId }));
+  };
+
   useUpdateEffect(() => {
-    if(disconnResult) {
+    if(result) {
       setTimeout(() => {
-        setWords('');
-        dispatch(robotInitialize());
+        dispatch(initialize());
       }, 2000);
     }
-  }, [disconnResult]);
+  }, [result]);
 
-  useMount(() => dispatch(robotInitialize()));
+  useMount(() => {
+    dispatch(initialize());
+  });
+
+  const getRole = (role, list) => {
+    if(role === MANAGER_ROLE) {
+      return true;
+    }
+    return list.length !== 0;
+  };
 
   return (
     <Grid container
@@ -57,12 +64,13 @@ const RobotConnContainer = () => {
         <Grid container item xs={12} md={10} style={{display: 'inline-flex'}}>
           <Grid item>
             <TextField
-              id="standard-basic"
-              className={classes.textField} 
-              label='로봇의 ObjectId 또는 Serial No.를 입력하세요.'
+              id="userId"
+              name="userId"
+              className={classes.smallTextField} 
+              label='로봇을 연결할 userId를 입력하세요.'
               onChange={handleTextChange} 
-              value={words}
-              error={findError}
+              value={userId || ''}
+              error={dataError}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -70,7 +78,7 @@ const RobotConnContainer = () => {
                 endAdornment: (<InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickClear}
+                  onClick={handleClickClear('userId')}
                 >
                   <ClearIcon />
                 </IconButton>
@@ -82,16 +90,16 @@ const RobotConnContainer = () => {
             <Button variant="contained" color="primary"  onClick={handleFindClick}>검색</Button>
           </Grid>
         </Grid>
-        {findError && (<Grid item xs={12}>
-          <Typography variant="h6">{findError}</Typography>
+        {dataError && (<Grid item xs={12}>
+          <Typography variant="h6">{dataError}</Typography>
         </Grid>)}
         <Grid container item xs={12}>
-          {robotData.map(({_id: id, robotId, userId, }) => (
+          {data.map(({id, userId: resultId, list, role}) => (
             <Grid item>
               <Card className={classes.cardRoot} key={id}>
                 <CardContent>
                   {
-                    !disconnResult && (
+                    !result && (
                       <Table size="small">
                         <TableBody>
                           <TableRow>
@@ -101,7 +109,10 @@ const RobotConnContainer = () => {
                               </Typography>
                             </TableCell>
                             <TableCell>
-                              <span className={classes.cardValue}>{userId}</span>
+                              <span className={classes.cardValue}>{resultId}</span>
+                              {
+                                role === MANAGER_ROLE && <Chip size="small" label="매니저" className={classes.roleChip} />
+                              }
                             </TableCell>
                           </TableRow>
                           <TableRow>
@@ -117,45 +128,75 @@ const RobotConnContainer = () => {
                           <TableRow>
                             <TableCell className={classes.cellProp}>
                               <Typography color="textSecondary">
-                                Serial No.
+                                robot list
                               </Typography>
                             </TableCell>
                             <TableCell>
-                              <span className={classes.cardValue}>{robotId}</span>
+                              {
+                                 
+                                getRole(role, list)&& list.map(({robotId:rId, serial}) => (<p className={classes.cardValue}>{`${serial} (${rId})`}</p>))
+                              }
+                              {
+                                !getRole(role, list)&& (<span className={classes.cardValue}>없음</span>)
+                              }
                             </TableCell>
                           </TableRow>
                         </TableBody>
                       </Table>)
                   }
-                  <Typography variant="subtitle1">
-                    {
-                      disconnResult === null && (
-                      <>
-                        <p>{`${userId} 사용자와 시리얼 ${robotId} 로봇의`}</p>
-                        <p>연결을 해제하시겠습니까?</p>
-                      </>
-                      )
-                    }
-                    {
-                      disconnResult === false && <Typography variant="body2" color="textSecondary" className={classes.cardError}>{disconnError}</Typography>
-                    }
-                    {
-                      disconnResult && !disconnError && (
-                        <>
-                          <p>{`${userId} 사용자와 시리얼 ${robotId} 로봇이`}</p>
-                          <p>연결 해제되었습니다.</p>
-                        </>
-                        )
-                    }
-                  </Typography>
-                  {disconnResult && !disconnError && (
-                    <Typography variant="body2" color="textSecondary">해당 카드는 자동으로 사라집니다.</Typography>
-                  )}
+                  {
+                    (!result && !dataError && (!getRole(role, list)|| role === MANAGER_ROLE)) && (
+                      <TextField
+                        id="robotId"
+                        name="robotId"
+                        className={classes.cardTextField} 
+                        label='새로운 로봇의 ObjectId 또는 Serial No.를 입력하세요.'
+                        onChange={handleTextChange} 
+                        value={robotId}
+                        error={dataError}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        InputProps={{
+                          endAdornment: (<InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickClear('robotId')}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        </InputAdornment>)
+                        }}
+                      />
+                    )
+                  }
+                  {
+                    (error || result) && (
+                      <Typography variant="subtitle1">
+                        {
+                          result === false && <Typography variant="body2" color="textSecondary" className={classes.cardError}>{error}</Typography>
+                        }
+                        {
+                          result && !error && (
+                            <>
+                              <p>{`${userId} 사용자에 ${robotId}의`}</p>
+                              <p>로봇이 연결되었습니다.</p>
+                            </>
+                            )
+                        }
+                      </Typography>
+                    )
+                  }
+                  {
+                    (!result && getRole(role, list)&& role !== MANAGER_ROLE) && (
+                      <Typography variant="subtitle1" color="textSecondary" className={classes.cardError}>이미 연결된 로봇이 있습니다.</Typography>
+                    )
+                  }
                 </CardContent>
                 {
-                  !disconnResult && (
+                  (!result && (!getRole(role, list)|| role === MANAGER_ROLE)) && (
                     <CardActions>
-                      <Button size="small" className={classes.btnDisconnect} onClick={handleDisconnectClick(robotId)}>연결 해제</Button>
+                      <Button size="small" color="secondary" className={classes.btn} onClick={handleConnectClick}>연결</Button>
                     </CardActions>
                   )
                 }
