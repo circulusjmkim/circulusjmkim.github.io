@@ -135,6 +135,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     padding: theme.spacing(2),
+    width: '100%',
     '& .MuiTypography-subtitle2': {
       color: theme.palette.secondary.light,
     }

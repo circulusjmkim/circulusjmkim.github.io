@@ -37,10 +37,10 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
         </IconButton>)}
         {mobileMatches && <Divider />}
       </Grid>
-      <Grid item xs={12} sm={8} md={9} lg={10}>
+      <Grid item container xs={12} sm={8} md={9} lg={10}>
         <div className={classes.content}>
           <ContentDescription desc={list[item].desc} />
-          <div>{children}</div>
+          <div style={{ width: '100%'}}>{children}</div>
         </div>
       </Grid>
     </Grid>
