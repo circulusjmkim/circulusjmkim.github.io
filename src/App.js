@@ -14,7 +14,7 @@ import Notice from './pages/Notice';
 
 const App = () => (
       <ThemeProvider theme={themeType(true)}>
-        <BrowserRouter basename="/mobile-admin">
+        <BrowserRouter>
           <CssBaseline />
           <Main>
             <Switch>

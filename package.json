@@ -1,6 +1,5 @@
 {
-  "name": "mobile-admin",
-  "homepage": "https://circulusjmkim.github.io/mobile-admin",
+  "name": "circulusjmkim.github.io",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
