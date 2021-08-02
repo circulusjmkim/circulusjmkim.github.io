@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/mobile-admin/static/css/main.83ec368e.chunk.css",
-    "main.js": "/mobile-admin/static/js/main.a4d33071.chunk.js",
-    "main.js.map": "/mobile-admin/static/js/main.a4d33071.chunk.js.map",
+    "main.js": "/mobile-admin/static/js/main.d9b8fb20.chunk.js",
+    "main.js.map": "/mobile-admin/static/js/main.d9b8fb20.chunk.js.map",
     "runtime-main.js": "/mobile-admin/static/js/runtime-main.a6675a04.js",
     "runtime-main.js.map": "/mobile-admin/static/js/runtime-main.a6675a04.js.map",
     "static/css/2.950d9cd0.chunk.css": "/mobile-admin/static/css/2.950d9cd0.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.950d9cd0.chunk.css",
     "static/js/2.1c7528f2.chunk.js",
     "static/css/main.83ec368e.chunk.css",
-    "static/js/main.a4d33071.chunk.js"
+    "static/js/main.d9b8fb20.chunk.js"
   ]
 }
