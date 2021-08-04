@@ -23,19 +23,23 @@
           //  https://username.github.io/repo-name/one/two?  a=b&c=d#qwe becomes
           // https://username.github.io/repo-name/? p=/one/two&q=a=b~and~c=d#qwe
           // Otherwise, leave segmentCount as 0.
-        const { pathname, host, replace } = window.location;
-        const pathArr = pathname.split('/');
-        pathArr.shift();
-        const url = pathArr.reduce((p, c, i) => {
-            let u = `${p}p=${c}`;
-            if(i < pathArr.length - 1) {
-                u = `${u}&`;
-            }
-            console.log(u);
-            return u;
-        }, `https://${host}?`);
-        console.log(url);
-        window.location.replace(url);
+        try {
+          const { pathname, host, replace } = window.location;
+          const pathArr = pathname.split('/');
+          pathArr.shift();
+          const url = pathArr.reduce((p, c, i) => {
+              let u = `${p}p=${c}`;
+              if(i < pathArr.length - 1) {
+                  u = `${u}&`;
+              }
+              console.log(u);
+              return u;
+          }, `https://${host}?`);
+          console.log(url);
+          window.location.replace(url);
+        } catch (error) {
+          console.log(error);
+        }
       </script>
   </head>
   <body>
