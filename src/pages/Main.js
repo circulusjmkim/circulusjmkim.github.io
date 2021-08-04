@@ -3,6 +3,7 @@ import { Container, Grid, makeStyles, useMediaQuery } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
+import qs from 'qs';
 import FullWidthTabs from '../components/FullWidthTabs';
 import { MENUS } from '../core/utils/consts';
 import Header from '../components/Header';
@@ -148,7 +149,7 @@ const Main = ({ children }) => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state.page);
   const { tab, item, home } = selector;
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const smMatches = useMediaQuery('(min-width:600px)');
 
   const handleTabChange = (v) => {
@@ -167,6 +168,14 @@ const Main = ({ children }) => {
     dispatch(setTab({tab: tabItemIndex, item: 0}));
     dispatch(setHome(pathname==='/'));
   }, [pathname]);
+
+  useEffect(() => {
+    const { p } = qs.parse(search, { ignoreQueryPrefix: true });
+    console.log('p', p);
+    if(p) {
+      history.replace(`/${p}`);
+    }
+  }, [search]);
 
   return (
     <div className={classes.root}>

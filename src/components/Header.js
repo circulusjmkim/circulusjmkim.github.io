@@ -39,7 +39,7 @@ const Header = ({title}) => {
   return (
   <Grid item xs={12}>
     <div className={classes.logo} role="button" onClick={() => history.push('/')} aria-hidden="true">
-      <img alt="Circulus" src="/logo_circulus.png"/>
+      <img alt="Circulus" src="/logo_circulus.png" />
       <Typography variant="h3">{title}</Typography>
     </div>
   </Grid>

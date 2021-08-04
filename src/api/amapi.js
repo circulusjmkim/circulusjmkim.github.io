@@ -86,6 +86,11 @@ export const signupByAdmin = async (data) => {
   return result;
 };
 
+export const getNotice = async ({ skip, limit }) => {
+  const result = await getFetchResult(`notice?${encodeGetParams({skip, limit})}`, GET);
+  return result;
+};
+
 export const addNotice = async (data) => {
   const result = await getFetchResult(`notice`, POST, data);
   return result;

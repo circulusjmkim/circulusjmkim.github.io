@@ -6,6 +6,7 @@ import FetchInterceptor from 'fetch-interceptor';
 import axios from 'axios';
 import reducer from './store';
 import App from './App';
+import 'moment/locale/ko';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { getRobotId, getUserPId } from './core/utils/common';
