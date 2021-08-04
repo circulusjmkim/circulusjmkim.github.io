@@ -29,7 +29,7 @@
         const url = pathArr.reduce((p, c) => {
             const u = `${p}&p=${c}`;
             return u;
-        }, `https://${host}`);
+        }, `https://${host}?`);
         console.log(url);
         replace(url);
       </script>
