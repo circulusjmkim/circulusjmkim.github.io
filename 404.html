@@ -26,13 +26,16 @@
         const { pathname, host, replace } = window.location;
         const pathArr = pathname.split('/');
         pathArr.shift();
-        const url = pathArr.reduce((p, c) => {
-            const u = `${p}p=${c}&`;
+        const url = pathArr.reduce((p, c, i) => {
+            let u = `${p}p=${c}`;
+            if(i < pathArr.length - 1) {
+                u = `${u}&`;
+            }
             console.log(u);
             return u;
         }, `https://${host}?`);
         console.log(url);
-        replace(url);
+        window.location.replace(url);
       </script>
   </head>
   <body>
