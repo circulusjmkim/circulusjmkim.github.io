@@ -130,7 +130,7 @@ const RobotTransferDataContainer = () => {
                         id="afterSerial"
                         name="afterSerial"
                         className={classes.cardTextField} 
-                        label='새로운 로봇의 ObjectId 또는 Serial No.를 입력하세요.'
+                        label='새로운 로봇의 Serial No.를 입력하세요.'
                         onChange={handleTextChange} 
                         value={afterSerial}
                         error={dataError}

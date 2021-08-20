@@ -165,13 +165,14 @@ const Main = ({ children }) => {
 
   useEffect(() => {
     const tabItemIndex = MENUS.findIndex(({ value }) => pathname === `/${value}`);
+    console.log(pathname);
     dispatch(setTab({tab: tabItemIndex, item: 0}));
     dispatch(setHome(pathname==='/'));
   }, [pathname]);
 
   useEffect(() => {
     const { p } = qs.parse(search, { ignoreQueryPrefix: true });
-    console.log('p', p);
+    console.log('p', p, search);
     if(p) {
       history.replace(`/${p}`);
     }

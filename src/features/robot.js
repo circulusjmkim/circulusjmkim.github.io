@@ -5,7 +5,7 @@ import { ROBOT_MENU_CLEAR, ROBOT_MENU_CONNECT, ROBOT_MENU_DISCONNECT, ROBOT_MENU
 
 export const getRobot = createAsyncThunk(
   `robot/GET_ROBOT`,
-  async (params, { rejectWithValue }) => {
+  async ({params, use}, { rejectWithValue }) => {
     let bObjectId = false;
     let bSerial = false;
     if(params.length === 24 && /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(params)) {
@@ -18,12 +18,11 @@ export const getRobot = createAsyncThunk(
     if(!bSerial && params.length === 8 && /^(?!0)[\w\d]{8}$/i.test(params)) {
       bSerial = true;
     }
-
     if(!(bObjectId || bSerial)) {
       return rejectWithValue('유효하지 않은 ObjectId 또는 Serial No.입니다.');
     }
     try {
-      const { result, data, error } = await findRobot({robot: params});
+      const { result, data, error } = await findRobot({robot: params, use});
       if(result) {
         return data;
       }
@@ -54,9 +53,9 @@ export const getUser = createAsyncThunk(
 
 export const clearRobot = createAsyncThunk(
   'robot/CLEAR',
-  async (serial, { rejectWithValue }) => {
+  async (robotOId, { rejectWithValue }) => {
     try {
-      const { result, error } = await clearRobotData({ serial });
+      const { result, error } = await clearRobotData({ robotOId });
       if(result) {
         return result;
       }
@@ -81,9 +80,9 @@ export const connectRobot = createAsyncThunk(
       if(error && 'code' in error && 'desc' in error) {
         return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
       }
-      return rejectWithValue(`😥 연결 해제 실패`);
+      return rejectWithValue(`😥 해당 계정${userId}과 로봇${serial} 연결 실패`);
     } catch (error) {
-      return rejectWithValue(`${JSON.stringify(error)}:😥 연결 해제 실패`);
+      return rejectWithValue(`${JSON.stringify(error)}:😥 해당 계정${userId}과 로봇${serial} 연결 실패`);
     }
   },
 );
@@ -219,7 +218,7 @@ export const findClick = () => (dispatch, getState)=> {
   const { menu, params } = robot;
   if(menu === ROBOT_MENU_DISCONNECT || menu === ROBOT_MENU_CLEAR) {
     const { words } = params;
-    dispatch(getRobot(words));
+    dispatch(getRobot({params: words, use: (menu === ROBOT_MENU_DISCONNECT)}));
   }
   if(menu === ROBOT_MENU_CONNECT) {
     const { userId } = params;
@@ -227,7 +226,7 @@ export const findClick = () => (dispatch, getState)=> {
   }
   if(menu === ROBOT_MENU_TRANSFER) {
     const { beforeSerial } = params;
-    dispatch(getRobot(beforeSerial));
+    dispatch(getRobot({params: beforeSerial, use: true}));
   }
 }
 

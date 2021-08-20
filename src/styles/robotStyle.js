@@ -29,6 +29,11 @@ export const useStyles = makeStyles((theme) => ({
       transform: 'translate(0, -4.5px) scale(0.75)'
     }
   },
+  cardGrid: {
+    '& .MuiGrid-root.MuiGrid-item': {
+      marginBottom: `${theme.spacing(2)}px`
+    }
+  },
   cardTextField: {
     minWidth: '300px',
     width: '100%',

@@ -2,13 +2,13 @@ import { POST, GET, PATCH, DELETE, encodeGetParams, setAPI,  } from './common';
 
 const getFetchResult = async (route, method, data) => {
   const { url, headers } = setAPI(route, method, data);
-  console.log('request', url, headers, data);
   const res = await fetch(url, headers);
   const result = res.json();
   return result;
 };
 
 export const connectRobotBySerial = async ({ userId, serial }) => {
+  // 논리적 아이디 필요
   const result = await getFetchResult(`robotConnect`, POST, { userId, serial });
   return result;
 };
@@ -32,8 +32,8 @@ export const updateUserPassword = async ({ userId, newPw }) => {
   return result;
 };
 
-export const findRobot = async ({ robot }) => {
-  const result = await getFetchResult(`findRobot?${encodeGetParams({ robot })}`, GET);
+export const findRobot = async ({ robot, use }) => {
+  const result = await getFetchResult(`findRobot?${encodeGetParams({ robot, use })}`, GET);
   return result;
 };
 export const findRobotByUser = async ({ user, robot }) => {
@@ -46,8 +46,8 @@ export const clearUserData = async ({ userId }) => {
   return result;
 };
 
-export const clearRobotData = async ({ serial }) => {
-  const result = await getFetchResult(`clearRobot?${encodeGetParams({ serial })}`, DELETE);
+export const clearRobotData = async ({ robotOId }) => {
+  const result = await getFetchResult(`clearRobot?${encodeGetParams({ robotOId })}`, DELETE);
   return result;
 };
 
@@ -86,8 +86,13 @@ export const signupByAdmin = async (data) => {
   return result;
 };
 
-export const getNotice = async ({ skip, limit }) => {
+export const getNoticeList = async ({ skip, limit }) => {
   const result = await getFetchResult(`notice?${encodeGetParams({skip, limit})}`, GET);
+  return result;
+};
+
+export const getNoticeItem = async (id) => {
+  const result = await getFetchResult(`notice?${encodeGetParams({id})}`, GET);
   return result;
 };
 
@@ -98,6 +103,11 @@ export const addNotice = async (data) => {
 
 export const updateNotice = async (data) => {
   const result = await getFetchResult(`notice`, PATCH, data);
+  return result;
+};
+
+export const deleteNotice = async (data) => {
+  const result = await getFetchResult(`notice`, DELETE, data);
   return result;
 };
 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useMount, useUpdateEffect } from 'react-use';
 import ClearIcon from '@material-ui/icons/Clear';
 import EnvSelect from '../components/EnvSelect';
-import { initialize, findClick, textChange, clearClick, disconnectRobot } from '../features/robot';
+import { initialize, findClick, textChange, clearClick, clearRobot } from '../features/robot';
 import { useStyles } from '../styles/robotStyle';
 
 const RobotClearDataContainer = () => {
@@ -27,8 +27,8 @@ const RobotClearDataContainer = () => {
     dispatch(clearClick(e));
   };
 
-  const handleDisconnectClick = (serial) => () => {
-    dispatch(disconnectRobot(serial));
+  const handleClearRobotClick = (serial) => () => {
+    dispatch(clearRobot(serial));
   };
 
   useUpdateEffect(() => {
@@ -67,7 +67,7 @@ const RobotClearDataContainer = () => {
               InputProps={{
                 endAdornment: (<InputAdornment position="end">
                 <IconButton
-                  aria-label="toggle password visibility"
+                  aria-label="robot id input value clear"
                   onClick={handleClickClear}
                 >
                   <ClearIcon />
@@ -83,8 +83,8 @@ const RobotClearDataContainer = () => {
         {dataError && (<Grid item xs={12}>
           <Typography variant="h6">{dataError}</Typography>
         </Grid>)}
-        <Grid container item xs={12}>
-          {data.map(({_id: id, robotId, userId, }) => (
+        <Grid container item xs={12} className={classes.cardGrid}>
+          {data.map(({_id: id, robotId, userId, use, createdAt, updatedAt }) => (
             <Grid item>
               <Card className={classes.cardRoot} key={id}>
                 <CardContent>
@@ -122,6 +122,36 @@ const RobotClearDataContainer = () => {
                               <span className={classes.cardValue}>{robotId}</span>
                             </TableCell>
                           </TableRow>
+                          <TableRow>
+                            <TableCell className={classes.cellProp}>
+                              <Typography color="textSecondary">
+                                use
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <span className={classes.cardValue}>{use.toString()}</span>
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className={classes.cellProp}>
+                              <Typography color="textSecondary">
+                                생성일
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <span className={classes.cardValue}>{createdAt}</span>
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className={classes.cellProp}>
+                              <Typography color="textSecondary">
+                                수정일
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <span className={classes.cardValue}>{updatedAt}</span>
+                            </TableCell>
+                          </TableRow>
                         </TableBody>
                       </Table>)
                   }
@@ -129,7 +159,7 @@ const RobotClearDataContainer = () => {
                     {
                       result === null && (
                       <>
-                        <p>{`해당 시리얼의 ${robotId} 로봇`}</p>
+                        <p>{`해당 시리얼(${robotId})의 로봇`}</p>
                         <p>데이터를 모두 삭제하시겠습니까?</p>
                       </>
                       )
@@ -153,7 +183,7 @@ const RobotClearDataContainer = () => {
                 {
                   !result && (
                     <CardActions>
-                      <Button size="small" className={classes.btnDisconnect} onClick={handleDisconnectClick(robotId)}>데이터 클리어</Button>
+                      <Button size="small" className={classes.btnDisconnect} onClick={handleClearRobotClick(id)}>데이터 클리어</Button>
                     </CardActions>
                   )
                 }

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import MDEditor from '@uiw/react-md-editor';
 import { useDispatch, useSelector } from 'react-redux';
-import ClearIcon from '@material-ui/icons/Clear';
-import { Button, Grid, IconButton, InputAdornment, TextField,FormControlLabel, Checkbox, Typography,  makeStyles } from '@material-ui/core';
+import { Grid, Typography,  makeStyles } from '@material-ui/core';
 import { useUpdateEffect } from 'react-use';
 import { add, init } from '../features/notice';
+import NoticeForm from '../components/NoticeForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,23 +16,6 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(2),
     }
   },
-  title: {
-    width: '100%',
-  },
-  editor: {
-    '&.w-md-editor': {
-      width: '100%',
-    },
-    '& > .w-md-editor-toolbar': {
-      minHeight: '29px',
-      height: 'initial !important',
-    }
-  },
-  buttonGroup: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    width: '100%',
-  }
 }));
 
 const initContent = "**공지사항을 입력하세요.**";
@@ -79,67 +61,7 @@ const NoticeAddContainer = () => {
       justifyContent="flex-start"
       className={classes.root}
     >
-      {!saved && (<>
-      <Grid item xs={12} lg={6}>
-        <TextField
-          id="title"
-          name="title"
-          className={classes.title} 
-          label='제목을 입력하세요.'
-          onChange={handleTitleChange} 
-          value={title}
-          InputProps={{
-            endAdornment: (<InputAdornment position="end">
-            <IconButton
-              aria-label="clear title"
-              onClick={handleClickClear}
-            >
-              <ClearIcon />
-            </IconButton>
-          </InputAdornment>)
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} lg={6}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={fixed}
-              onChange={handleCheckChange('fixed')}
-              name="fixed"
-              color="primary"
-            />
-          }
-          label="상단고정"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={order}
-              onChange={handleCheckChange('order')}
-              name="order"
-              color="primary"
-            />
-          }
-          label="릴리즈노트"
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <MDEditor
-          value={content}
-          onChange={setContent}
-          height={window.screen.availHeight*.5}
-          className={classes.editor}
-        />
-      </Grid>
-      {
-        error && <Typography variant="body2" color="error">{error}</Typography>
-      }
-      <Grid item className={classes.buttonGroup} xs={12}>
-        <Button variant="contained" color="primary" onClick={handleInit}>초기화</Button>
-        <Button variant="contained" color="primary" onClick={handleClick}>등록</Button>
-      </Grid>
-      </>)}
+      {!saved && (<NoticeForm {...{label: '등록', fixed, order, title, content, error, handleInit, handleClick, setContent, handleCheckChange, handleTitleChange, handleClickClear}} />)}
       {
         saved && (
           <>
