@@ -2,9 +2,15 @@
 
 // const SITE_URL = 'http://localhost:3000/';
 const SITE_URL = 'https://circulusjmkim.github.io/';
-// const API_URL = () => `http://0.0.0.0:57703/v1/admin/`;
-console.log(process.env.NODE_ENV);
-const API_URL = (env) => env ? `https://${env}-mapi.circul.us/v1/admin/` : `https://ops-mapi.circul.us/v1/admin/`;
+const API_URL = (env) => {
+  if(process.env.NODE_ENV !== 'production') {
+    return 'http://0.0.0.0:57703/v1/admin/';
+  }
+  if(env) {
+    return `https://${env}-mapi.circul.us/v1/admin/`;
+  }
+  return `https://stg-mapi.circul.us/v1/admin/`;
+}
 const publishDate = '2107161406';
 
 export const POST = 'POST';
@@ -21,6 +27,7 @@ export const encodeGetParams = (p) =>
 export const setAPI = (path, method, body) => {
   const env = localStorage.getItem('env');
   const url = `${API_URL(env)}${path}`;
+  console.log(url);
   const headers =
     method === GET && body && 'token' in body
       ? {
