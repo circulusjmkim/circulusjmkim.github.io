@@ -36,8 +36,12 @@
               console.log(p,c,i,u);
               return u;
           }, `https://${host}?`);
-          alert(`${pathArr.join('|')}, ${url}`);
-          window.location.replace(url);
+          let append = search;
+          if(search) {
+            append = search.replace('?', '&');
+          }
+          alert(`${pathArr.join('|')}, ${url}${append}`);
+          window.location.replace(url+append);
         } catch (error) {
           console.log(error);
         }
