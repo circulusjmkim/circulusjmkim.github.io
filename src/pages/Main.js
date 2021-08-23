@@ -172,13 +172,31 @@ const Main = ({ children }) => {
   }, [pathname]);
   
   useEffect(() => {
-    const { menu } = qs.parse(search, { ignoreQueryPrefix: true });
-    if(menu && pathname) {
-      const tabItemIndex = MENUS.findIndex(({ value }) => pathname === `/${value}`);
-      const itemIndex = MENUS[tabItemIndex].list.findIndex(({ path }) => path === menu);
-      dispatch(setTab({tab: tabItemIndex, item: itemIndex}));
-      dispatch(setHome(pathname==='/'));
+    // SPA 보완을 위한 routing 코드
+    const { p, menu } = qs.parse(search, { ignoreQueryPrefix: true });
+    let path = pathname;
+    if(p) {
+      path += p;
     }
+    if(menu) {
+      path += `?menu=${menu}`;
+    }
+    dispatch(setHome(path==='/'));
+    if(path !== pathname) {
+      if((tab < 0 || item < 0)) {
+        let tabname = pathname !== '/' && pathname;
+        if(!tabname && p) {
+          tabname = `/${p}`;
+        }
+        if(tabname) {
+          const tabItemIndex = MENUS.findIndex(({ value }) => tabname === `/${value}`);
+          const itemIndex = MENUS[tabItemIndex].list.findIndex((listitem) => listitem.path === menu);
+          return dispatch(setTab({tab: tabItemIndex, item: itemIndex}));
+        }
+      }
+      return history.replace(path);
+    }
+    return history.replace('/');
   }, [search]);
 
   return (
