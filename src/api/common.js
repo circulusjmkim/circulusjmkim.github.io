@@ -1,7 +1,7 @@
 // import axios from 'axios';
 
 // const SITE_URL = 'http://localhost:3000/';
-const SITE_URL = 'https://circulusjmkim.github.io/';
+const SITE_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:3000':'https://circulusjmkim.github.io';
 const API_URL = (env) => {
   if(process.env.NODE_ENV !== 'production') {
     return 'http://0.0.0.0:57703/v1/admin/';
@@ -27,19 +27,20 @@ export const encodeGetParams = (p) =>
 export const setAPI = (path, method, body) => {
   const env = localStorage.getItem('env');
   const url = `${API_URL(env)}${path}`;
-  console.log(url);
   const headers =
     method === GET && body && 'token' in body
       ? {
           method,
           headers: {
             'x-access-token': body.token,
+            'Access-Control-Allow-Origin': SITE_URL
           },
         }
       : {
           method,
           headers: {
             Accept: 'application/json, text/plain, */*',
+            'Access-Control-Allow-Origin': SITE_URL,
             'Content-Type': 'application/json',
           },
         };
@@ -71,7 +72,7 @@ async function getCachedData(cacheName, url, audio) {
     if (url.indexOf('diary') > -1) {
       return null;
     }
-    return { cached: false, file: `${SITE_URL}image/img_thumb.png` };
+    return { cached: false, file: `${SITE_URL}/image/img_thumb.png` };
   }
 
   // eslint-disable-next-line no-return-await
@@ -112,7 +113,7 @@ const getMobileOS = () => {
 };
 
 export async function getFile(data) {
-  if (!data) return `${SITE_URL}image/img_thumb.png`;
+  if (!data) return `${SITE_URL}/image/img_thumb.png`;
   const cacheName = `assets-${publishDate}`;
   const url = `${API_URL()}file?${encodeGetParams(data)}`;
   const [key] = Object.keys(data);
@@ -143,6 +144,6 @@ export async function getFile(data) {
     if (data && 'diary' in data) {
       return null;
     }
-    return `${SITE_URL}image/img_thumb.png`;
+    return `${SITE_URL}/image/img_thumb.png`;
   }
 }
