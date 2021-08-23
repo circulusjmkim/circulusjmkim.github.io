@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@material-ui/core';
 
-const ContentDescription = ({ desc }) => {
+const ContentDescription = ({ desc, value }) => {
   const [descArr, setDescription] = useState(desc.split('\n'));
 
   useEffect(() => {
@@ -11,7 +11,7 @@ const ContentDescription = ({ desc }) => {
   return (
   <>
   {
-    descArr.map(description => <Typography variant="subtitle2" gutterBottom>{description}</Typography>)
+    descArr.map(description => <Typography key={value} variant="subtitle2" gutterBottom>{description}</Typography>)
   }
   </>
   );

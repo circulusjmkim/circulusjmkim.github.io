@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import { Grid, IconButton, Divider, useMediaQuery } from '@material-ui/core';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
@@ -39,7 +40,7 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
       </Grid>
       <Grid item container xs={12} sm={8} md={9} lg={10}>
         <div className={classes.content}>
-          <ContentDescription desc={list[item].desc} />
+          <ContentDescription {...list[item]} />
           <div style={{ width: '100%'}}>{children}</div>
         </div>
       </Grid>
