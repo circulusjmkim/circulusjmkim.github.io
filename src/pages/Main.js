@@ -167,6 +167,10 @@ const Main = ({ children }) => {
   useEffect(() => {
     // SPA 보완을 위한 tab별 menuitem 별 라우팅
     const { p, menu } = qs.parse(search, { ignoreQueryPrefix: true });
+    if(!p && !menu && pathname === '/') {
+      dispatch(setHome(pathname==='/'));
+      return dispatch(setTab({tab: -1, item: -1}));
+    }
     let path = pathname;
     if(p) {
       path += p;
