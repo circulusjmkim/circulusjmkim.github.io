@@ -153,7 +153,7 @@ const Main = ({ children }) => {
   const smMatches = useMediaQuery('(min-width:600px)');
 
   const handleTabChange = (v) => {
-    dispatch(setTab({tab: v}));
+    dispatch(setTab({tab: v, item: 0}));
     if(v > -1) {
       history.push(`/${MENUS[v].value}`);
     }
@@ -163,16 +163,9 @@ const Main = ({ children }) => {
     dispatch(setItem(v));
   };
 
-  useEffect(() => {
-    const tabItemIndex = MENUS.findIndex(({ value }) => pathname === `/${value}`);
-    if(!search) {
-      dispatch(setTab({tab: tabItemIndex, item: 0}));
-      dispatch(setHome(pathname==='/'));
-    }
-  }, [pathname]);
   
   useEffect(() => {
-    // SPA 보완을 위한 routing 코드
+    // SPA 보완을 위한 tab별 menuitem 별 라우팅
     const { p, menu } = qs.parse(search, { ignoreQueryPrefix: true });
     let path = pathname;
     if(p) {
@@ -182,21 +175,16 @@ const Main = ({ children }) => {
       path += `?menu=${menu}`;
     }
     dispatch(setHome(path==='/'));
-    if(path !== pathname) {
-      if((tab < 0 || item < 0)) {
-        let tabname = pathname !== '/' && pathname;
-        if(!tabname && p) {
-          tabname = `/${p}`;
-        }
-        if(tabname) {
-          const tabItemIndex = MENUS.findIndex(({ value }) => tabname === `/${value}`);
-          const itemIndex = MENUS[tabItemIndex].list.findIndex((listitem) => listitem.path === menu);
-          return dispatch(setTab({tab: tabItemIndex, item: itemIndex}));
-        }
-      }
-      return history.replace(path);
+    let tabname = pathname !== '/' && pathname;
+    if(!tabname && p) {
+      tabname = `/${p}`;
     }
-    return history.replace('/');
+    if(tabname) {
+      const tabItemIndex = MENUS.findIndex(({ value }) => tabname === `/${value}`);
+      const itemIndex = menu ? MENUS[tabItemIndex].list.findIndex((listitem) => listitem.path === menu) : 0;
+      return dispatch(setTab({tab: tabItemIndex, item: itemIndex}));
+    }
+    return history.replace(path);
   }, [search]);
 
   return (
