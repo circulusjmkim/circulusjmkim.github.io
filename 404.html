@@ -24,8 +24,8 @@
           // https://username.github.io/repo-name/? p=/one/two&q=a=b~and~c=d#qwe
           // Otherwise, leave segmentCount as 0.
         try {
-          const { pathname, host, replace } = window.location;
-          alert(pathname);
+          const { pathname, search, host, replace } = window.location;
+          alert(`${pathname} | ${search}`);
           const pathArr = pathname.split('/');
           pathArr.shift();
           const url = pathArr.reduce((p, c, i) => {
