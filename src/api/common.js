@@ -2,8 +2,9 @@
 
 // const SITE_URL = 'http://localhost:3000/';
 const SITE_URL = 'https://circulusjmkim.github.io/';
-const API_URL = () => `http://0.0.0.0:57703/v1/admin/`;
-// const API_URL = (env) => env ? `https://${env}-mapi.circul.us/v1/admin/` : `https://ops-mapi.circul.us/v1/admin/`;
+// const API_URL = () => `http://0.0.0.0:57703/v1/admin/`;
+console.log(process.env.NODE_ENV);
+const API_URL = (env) => env ? `https://${env}-mapi.circul.us/v1/admin/` : `https://ops-mapi.circul.us/v1/admin/`;
 const publishDate = '2107161406';
 
 export const POST = 'POST';
