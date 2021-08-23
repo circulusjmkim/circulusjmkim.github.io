@@ -25,7 +25,6 @@
           // Otherwise, leave segmentCount as 0.
         try {
           const { pathname, search, host, replace } = window.location;
-          alert(`${pathname} | ${search}`);
           const pathArr = pathname.split('/');
           pathArr.shift();
           const url = pathArr.reduce((p, c, i) => {
@@ -40,7 +39,6 @@
           if(search) {
             append = search.replace('?', '&');
           }
-          alert(`${pathArr.join('|')}, ${url}${append}`);
           window.location.replace(url+append);
         } catch (error) {
           console.log(error);
