@@ -31,16 +31,20 @@ export const setAPI = (path, method, body) => {
     method === GET && body && 'token' in body
       ? {
           method,
+          mode: 'cors',
           headers: {
             'x-access-token': body.token,
-            'Access-Control-Allow-Origin': SITE_URL
+            'Access-Control-Allow-Origin': SITE_URL,
+            'Access-Control-Allow-Methods': method,
           },
         }
       : {
           method,
+          mode: 'cors',
           headers: {
-            Accept: 'application/json, text/plain, */*',
+            'Accept': 'application/json, text/plain, */*',
             'Access-Control-Allow-Origin': SITE_URL,
+            'Access-Control-Allow-Methods': method,
             'Content-Type': 'application/json',
           },
         };
