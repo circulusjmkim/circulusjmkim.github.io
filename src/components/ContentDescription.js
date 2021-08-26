@@ -1,8 +1,9 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@material-ui/core';
 
 const ContentDescription = ({ desc, value }) => {
-  const [descArr, setDescription] = useState(desc.split('\n'));
+  const [descArr, setDescription] = useState([]);
 
   useEffect(() => {
     setDescription(desc.split('\n'));
@@ -11,7 +12,7 @@ const ContentDescription = ({ desc, value }) => {
   return (
   <>
   {
-    descArr.map(description => <Typography key={value} variant="subtitle2" gutterBottom>{description}</Typography>)
+    descArr.map((description, i) => <Typography key={`${value}_${i}`} variant="subtitle2" gutterBottom>{description}</Typography>)
   }
   </>
   );
