@@ -27,11 +27,11 @@ const User = () => {
   }, [item]);
 
   return (<>
-    {item === 0 && <UserUpdatePasswordContainer /> }
-    {item === 1 && <UserUpdateVerifiedContainer /> }
-    {item === 2 && <UserClearDataContainer /> }
+    {item === 0 && <UserSignupContainer /> }
+    {item === 1 && <UserUpdatePasswordContainer /> }
+    {item === 2 && <UserUpdateVerifiedContainer /> }
     {item === 3 && <UserUpdateBAKDataContainer /> }
-    {item === 4 && <UserSignupContainer /> }
+    {item === 4 && <UserClearDataContainer /> }
   </>);
 };
 
