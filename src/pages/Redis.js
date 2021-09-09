@@ -2,8 +2,9 @@ import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-use';
-import RedisFindContainer from '../containers/RedisFindContainer';
+// import RedisFindContainer from '../containers/RedisFindContainer';
 import RedisAddContainer from '../containers/RedisAddContainer';
+import RedisRemoveContainer from '../containers/RedisRemoveContainer';
 import { MENUS } from '../core/utils/consts';
 import { setMenu } from '../features/robot';
 
@@ -24,8 +25,9 @@ const Redis = () => {
   }, [item]);
 
   return (<>
-    {item === 0 && <RedisFindContainer /> }
-    {item === 1 && <RedisAddContainer /> }
+    {/* {item === 0 && <RedisFindContainer /> } */}
+    {item === 0 && <RedisAddContainer /> }
+    {item === 1 && <RedisRemoveContainer /> }
   </>);
 };
 

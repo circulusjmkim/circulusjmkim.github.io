@@ -55,7 +55,6 @@ export const transferRobotData = async ({ userId, serial, newSerial }) => {
   const result = await getFetchResult(`replaceRobot`, POST, { userId, serial, newSerial });
   return result;
 };
-
 export const findUserForRobotConnect = async ({ userId }) => {
   const result = await getFetchResult(`findUserByUserId?${encodeGetParams({userId})}`, GET);
   return result;
@@ -71,8 +70,13 @@ export const clearUserDataForTest = async ({userId, deleteUser}) => {
   return result;
 };
 
-export const registerRedis = async ({userId, userPId, robotId, robotPId}) => {
-  const result = await getFetchResult(`redis`, POST, {userId, userPId, robotId, robotPId});
+export const registerRedis = async ({ userId, userPId, robotId, robotPId }) => {
+  const result = await getFetchResult(`redis`, POST, { userId, userPId, robotId, robotPId });
+  return result;
+};
+
+export const unregisterRedis = async ({ userPId, robotPId }) => {
+  const result = await getFetchResult(`redis`, DELETE, { userPId, robotPId });
   return result;
 };
 

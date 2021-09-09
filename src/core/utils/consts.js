@@ -39,8 +39,9 @@ const MENUS = [
     label: 'redis 인증',
     desc: 'redis 인증 정보를 조회 및 등록 할 수 있습니다.',
     list: [
-      {path: 'find', value: 'redis_find', label: 'Redis 조회', desc: '사용자 및 로봇 정보로 Redis를 조회합니다.' },
+      // {path: 'find', value: 'redis_find', label: 'Redis 조회', desc: '사용자 및 로봇 정보로 Redis를 조회합니다.' },
       {path: 'add', value: 'redis_add', label: 'Redis 등록', desc: '사용자 및 로봇 정보를 Redis에 등록합니다.'},
+      {path: 'remove', value: 'redis_remove', label: 'Redis 삭제', desc: '사용자 및 로봇 정보를 Redis에서 삭제합니다.'},
     ]
   },
   {
@@ -132,6 +133,8 @@ const ROBOT_MENU_CONNECT = 0;
 const ROBOT_MENU_DISCONNECT = 1;
 const ROBOT_MENU_TRANSFER = 2;
 const ROBOT_MENU_CLEAR = 3;
+const REDIS_MENU_ADD=0;
+const REDIS_MENU_REMOVE=1;
 
 export {
   MENUS, 
@@ -141,4 +144,6 @@ export {
   ROBOT_MENU_DISCONNECT,
   ROBOT_MENU_TRANSFER,
   ROBOT_MENU_CLEAR,
+  REDIS_MENU_ADD,
+  REDIS_MENU_REMOVE,
 };
