@@ -115,3 +115,17 @@ export const deleteNotice = async (data) => {
   return result;
 };
 
+export const checkUserId = async (userId) => {
+  const result = await getFetchResult(`checkId?${encodeGetParams({userId})}`, GET);
+  return result;
+};
+
+export const userSignUp = async (data) => {
+  const result = await getFetchResult('signup', POST, data);
+  return result;
+};
+
+export const checkUserInfo = async ({ target, value }) => {
+  const result = await getFetchResult(`checkInfo?${encodeGetParams({target, value})}`, GET);
+  return result;
+}
