@@ -102,7 +102,6 @@ export const textChange = (e, bUser) => (dispatch) => {
     name += 'PId';
   }
 
-  console.log(name, value);
   dispatch(setParams({ [name]: value }));
 }
 
