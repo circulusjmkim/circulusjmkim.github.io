@@ -2,6 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 import { checkUserId, checkUserInfo, userSignUp } from "../api/amapi";
+import { validateBirthDate, validateEmail, validateId, validateName, validatePassword, validateTel } from "../core/utils/validate";
 
 const getErrorObj = (prop, msg, error) => {
   let rejectValue;
@@ -44,12 +45,12 @@ export const checkId = createAsyncThunk(
 
 export const checkInfo = createAsyncThunk(
   'signup/CHECK_INFO',
-  async ({target, value}, { rejectWithValue, getState }) => {
+  async ({name: target, value}, { rejectWithValue, getState }) => {
     try {
       const { signup } = getState();
       const { error, data: {verified} } = signup;
       const { result, error: e } = await checkUserInfo({target, value});
-      let rejectValue = getErrorObj(`verified.${target}`, '', error);
+      let rejectValue = getErrorObj(target, '', error);
       if(result) {
         return { verified: {...verified, [target]: result}, error: rejectValue };
       }
@@ -59,10 +60,10 @@ export const checkInfo = createAsyncThunk(
       }
       msg = `이미 존재하는 ${target} 인증정보 입니다.`;
       
-      rejectValue = getErrorObj(`verified.${target}`, msg, error);
+      rejectValue = getErrorObj(target, msg, error);
       return rejectWithValue(rejectValue);
     } catch (error) {
-      const rejectValue = getErrorObj(`verified.${target}`, `${JSON.stringify(error)}:😥 인증 정보 중복 체크 중 오류 발생`, error);
+      const rejectValue = getErrorObj(target, `${JSON.stringify(error)}:😥 인증 정보 중복 체크 중 오류 발생`, error);
       return rejectWithValue(rejectValue);
     }
   }
@@ -75,6 +76,7 @@ export const signUp = createAsyncThunk(
       const { signup } = getState();
       const { data } = signup;
       const { result, error } = await userSignUp(data);
+      console.log(result);
       if(result) {
         return result;
       }
@@ -100,11 +102,12 @@ const signupSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    initialize: (state) => ({...initialState, menu: state.menu, bUser: state.bUser, params: state.bUser ? {userId: '', userPId: ''}:{robotId: '', robotPId: ''} }),
-    setToggle: (state) => ({...state, bUser: !state.bUser, params: !state.bUser ? { userId: '', userPId: ''} : {robotId: '', robotPId: ''}}),
-    setParams: (state, action) => ({...state, error: '', params: {...state.params, ...action.payload}}),
-    setClear: (state, action) => ({...initialState, menu: state.menu, params: action.payload}),
+    initialize: (state) => ({...initialState, menu: state.menu, bUser: state.bUser, data: state.bUser ? {userId: '', userPId: ''}:{robotId: '', robotPId: ''} }),
+    setToggle: (state) => ({...state, bUser: !state.bUser, data: !state.bUser ? { userId: '', userPId: ''} : {robotId: '', robotPId: ''}}),
+    setParams: (state, action) => ({...state, data: {...state.data, ...action.payload}}),
+    setClear: (state, action) => ({...initialState, menu: state.menu, data: action.payload}),
     setError: (state, action) => ({...state, error: action.payload}),
+    initChecked: (state) => ({...state, idChecked: !state.idChecked}),
   },
   extraReducers: {
     [checkId.pending.type]: state => ({ ...state, loading: true,}),
@@ -150,21 +153,33 @@ const signupSlice = createSlice({
 });
 
 const { reducer: signupReducer, actions } = signupSlice;
-export const { initialize, setMenu, setParams, setClear, setError, setToggle } = actions;
+export const { initialize, setMenu, setParams, setClear, setError, setToggle, initChecked } = actions;
 
-export const textChange = (e, bUser) => (dispatch) => {
-  const { target: { value: v, name: n } } = e;
-  const value = v.replace(/[^a-zA-Z\d]/g, '').toLowerCase();
-  
-  let name = bUser ? 'user' : 'robot';
-  if(n === 'logical') {
-    name += 'Id';
+const getValidateResult = ({value, name}) =>
+{ 
+  console.log(name, value); 
+  switch (name) {
+    case 'userId': return validateId(value);
+    case 'password': return validatePassword(value);
+    case 'lastName': return validateName(value, name);
+    case 'firstName': return validateName(value, name);
+    case 'email': return validateEmail({value});
+    case 'tel': return validateTel({value});
+    case 'birthDate': return validateBirthDate(value);
+    default: return '';
   }
-  if(n === 'physical') {
-    name += 'PId';
-  }
+}
 
+export const textChange = (e) => (dispatch, getState) => {
+  const { target: { value, name } } = e;
+  const msg = getValidateResult({name, value});
+  const { signup } = getState();
+  const { error, idChecked } = signup;
+  dispatch(setError({...error, [name]: msg}));
   dispatch(setParams({ [name]: value }));
+  if(idChecked && name === 'userId') {
+    dispatch(initChecked());
+  }
 }
 
 export const clearClick = (e, bUser) => (dispatch) => {

@@ -4,6 +4,7 @@ import findReducer from '../features/find';
 import pageReducer from '../features/page';
 import noticeReducer from '../features/notice';
 import redisReducer from '../features/redis';
+import signupReducer from '../features/signup';
 
 export default combineReducers({
   page: pageReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   robot: robotReducer,
   notice: noticeReducer,
   redis: redisReducer,
+  signup: signupReducer,
 });

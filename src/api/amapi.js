@@ -86,7 +86,7 @@ export const findRedis = async ({userId, userPId, robotId, robotPId}) => {
 };
 
 export const signupByAdmin = async (data) => {
-  const result = await getFetchResult(`signup`, POST, data);
+  const result = await getFetchResult(`signup`, POST, {data});
   return result;
 };
 
