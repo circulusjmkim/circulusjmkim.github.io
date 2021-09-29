@@ -7,11 +7,18 @@ const getFetchResult = async (route, method, data) => {
   return result;
 };
 
+export const connectRobotsBySerial = async ({ userId, serial }) => {
+  // 논리적 아이디 필요
+  const result = await getFetchResult(`robotsConnect`, POST, { userId, serial });
+  return result;
+};
+
 export const connectRobotBySerial = async ({ userId, serial }) => {
   // 논리적 아이디 필요
   const result = await getFetchResult(`robotConnect`, POST, { userId, serial });
   return result;
 };
+
 export const disconnectRobotBySerial = async ({ serial }) => {
   const result = await getFetchResult(`robotDisconnect`, PATCH, { serial });
   return result;
@@ -29,6 +36,11 @@ export const deleteAndBAKWithdrawUser = async ({ userId }) => {
 
 export const updateUserPassword = async ({ userId, newPw }) => {
   const result = await getFetchResult(`resetPassword`, PATCH, { userId, newPw });
+  return result;
+};
+
+export const updateUserVerifiedInfo = async ({ userId, tel, email }) => {
+  const result = await getFetchResult(`user`, PATCH, { userId, tel, email  });
   return result;
 };
 
@@ -55,8 +67,8 @@ export const transferRobotData = async ({ userId, serial, newSerial }) => {
   const result = await getFetchResult(`replaceRobot`, POST, { userId, serial, newSerial });
   return result;
 };
-export const findUserForRobotConnect = async ({ userId }) => {
-  const result = await getFetchResult(`findUserByUserId?${encodeGetParams({userId})}`, GET);
+export const findUserForRobotConnect = async ({ userId, use }) => {
+  const result = await getFetchResult(`findUserByUserId?${encodeGetParams({userId, use})}`, GET);
   return result;
 };
 
