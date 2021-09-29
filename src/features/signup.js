@@ -157,7 +157,6 @@ export const { initialize, setMenu, setParams, setClear, setError, setToggle, in
 
 const getValidateResult = ({value, name}) =>
 { 
-  console.log(name, value); 
   switch (name) {
     case 'userId': return validateId(value);
     case 'password': return validatePassword(value);

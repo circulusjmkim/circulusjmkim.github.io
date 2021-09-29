@@ -41,11 +41,13 @@ export const useStyles = makeStyles((theme) => ({
   },
   cardGrid: {
     '& .MuiGrid-root.MuiGrid-item': {
-      marginBottom: `${theme.spacing(2)}px`
+      marginBottom: `${theme.spacing(1)}px`,
+      marginRight: `${theme.spacing(1)}px`
     }
   },
   cardTextField: {
     minWidth: '300px',
+    maxWidth: '500px',
     width: '100%',
     margin: `${theme.spacing(2)}px 0`,
     '& .MuiInputLabel-shrink': {
