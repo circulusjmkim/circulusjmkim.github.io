@@ -43,11 +43,9 @@ const RobotDisconnContainer = () => {
 
   return (
     <Grid container
-      direction="row"
+      direction="column"
       justifyContent="flex-start"
-      alignItems="stretch"
       className={classes.root}
-      spacing={2}
       >
         <Grid item xs={6} md={2} className={classes.marginVertical}>
           <EnvSelect />

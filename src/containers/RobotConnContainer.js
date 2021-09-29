@@ -1,10 +1,10 @@
 import React from 'react';
-import { Grid, Button, TextField, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, InputAdornment, IconButton, Chip } from '@material-ui/core';
+import { Grid, Button, TextField, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, InputAdornment, IconButton, Chip, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMount, useUpdateEffect } from 'react-use';
 import ClearIcon from '@material-ui/icons/Clear';
 import EnvSelect from '../components/EnvSelect';
-import { initialize, findClick, textChange, clearClick, connectRobot } from '../features/robot';
+import { initialize, findClick, textChange, clearClick, connectRobot, addTextField, addSerialChange } from '../features/robot';
 import { useStyles } from '../styles/robotStyle';
 import { MANAGER_ROLE } from '../core/utils/consts';
 
@@ -12,7 +12,7 @@ const RobotConnContainer = () => {
   const dispatch = useDispatch();
   const selector = useSelector(state => state.robot);
   const { dataError, data, result, error, params } = selector;
-  const { userId, robotId } = params;
+  const { userId, robots } = params;
   const classes = useStyles();
 
   const handleFindClick = () => {
@@ -23,12 +23,20 @@ const RobotConnContainer = () => {
     dispatch(textChange(e));
   };
 
-  const handleClickClear = (name) => () => {
-    dispatch(clearClick(name));
+  const handleSerialTextChange = (i) => (e) => {
+    dispatch(addSerialChange(e, i));
+  };
+
+  const handleBlurChange = () => {
+    dispatch(addTextField());
+  }
+
+  const handleClickClear = (index) => () => {
+    dispatch(clearClick('robots', index));
   }
 
   const handleConnectClick = () => {
-    dispatch(connectRobot({ serial: robotId, userId }));
+    dispatch(connectRobot({ serial: robots, userId }));
   };
 
   useUpdateEffect(() => {
@@ -52,11 +60,9 @@ const RobotConnContainer = () => {
 
   return (
     <Grid container
-      direction="row"
+      direction="column"
       justifyContent="flex-start"
-      alignItems="stretch"
       className={classes.root}
-      spacing={2}
       >
         <Grid item xs={6} md={2} className={classes.marginVertical}>
           <EnvSelect />
@@ -93,7 +99,7 @@ const RobotConnContainer = () => {
         {dataError && (<Grid item xs={12}>
           <Typography variant="h6">{dataError}</Typography>
         </Grid>)}
-        <Grid container item xs={12}>
+        <Grid container item xs={12} md={10}>
           {data.map(({id, userId: resultId, list, role}) => (
             <Grid item>
               <Card className={classes.cardRoot} key={id}>
@@ -133,8 +139,7 @@ const RobotConnContainer = () => {
                             </TableCell>
                             <TableCell>
                               {
-                                 
-                                getRole(role, list)&& list.map(({robotId:rId, serial}) => (<p className={classes.cardValue}>{`${serial} (${rId})`}</p>))
+                                getRole(role, list)&& list.map(({ robotId:rId, serial }) => (<p className={classes.cardValue}>{`${serial} (${rId})`}</p>))
                               }
                               {
                                 !getRole(role, list)&& (<span className={classes.cardValue}>없음</span>)
@@ -145,30 +150,33 @@ const RobotConnContainer = () => {
                       </Table>)
                   }
                   {
-                    (!result && !dataError && (!getRole(role, list)|| role === MANAGER_ROLE)) && (
-                      <TextField
-                        id="robotId"
-                        name="robotId"
-                        className={classes.cardTextField} 
-                        label='새로운 로봇의 Serial No.를 입력하세요.'
-                        onChange={handleTextChange} 
-                        value={robotId}
-                        error={dataError}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        InputProps={{
-                          endAdornment: (<InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickClear('robotId')}
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </InputAdornment>)
-                        }}
-                      />
-                    )
+                    (!result && !dataError && (!getRole(role, list)|| role === MANAGER_ROLE))
+                    && robots && robots.map((robotId, index) => (
+                      <Box>
+                        <TextField
+                          id="robotId"
+                          name="robotId"
+                          className={classes.cardTextField} 
+                          label='새로운 로봇의 Serial No.를 입력하세요.'
+                          onChange={handleSerialTextChange(index)} 
+                          onBlur={handleBlurChange} 
+                          value={robotId}
+                          error={dataError}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          InputProps={{
+                            endAdornment: (<InputAdornment position="end">
+                            <IconButton
+                              onClick={handleClickClear(index)}
+                            >
+                              <ClearIcon />
+                            </IconButton>
+                          </InputAdornment>)
+                          }}
+                        />
+                      </Box>
+                      ))
                   }
                   {
                     (error || result) && (
@@ -179,7 +187,7 @@ const RobotConnContainer = () => {
                         {
                           result && !error && (
                             <>
-                              <p>{`${userId} 사용자에 ${robotId}의`}</p>
+                              <p>{`${userId} 사용자에 ${robots.join(', ')}의`}</p>
                               <p>로봇이 연결되었습니다.</p>
                             </>
                             )

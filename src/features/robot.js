@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { disconnectRobotBySerial, transferRobotData, findRobot, clearRobotData, connectRobotBySerial, findUserForRobotConnect } from "../api/amapi";
+import { disconnectRobotBySerial, transferRobotData, findRobot, clearRobotData, findUserForRobotConnect, connectRobotsBySerial } from "../api/amapi";
 import { ROBOT_MENU_CLEAR, ROBOT_MENU_CONNECT, ROBOT_MENU_DISCONNECT, ROBOT_MENU_TRANSFER } from "../core/utils/consts";
 
 export const getRobot = createAsyncThunk(
@@ -40,9 +40,9 @@ export const getUser = createAsyncThunk(
   `robot/GET_USER`,
   async ({ userId }, { rejectWithValue }) => {
     try {
-      const { result, data } = await findUserForRobotConnect({ userId });
+      const { result, data } = await findUserForRobotConnect({ userId, use: true });
       if(result) {
-        return data;
+        return { data, params: {userId, robots: ['']}};
       }
       return rejectWithValue('😥 목록 조회 실패');
     } catch (error) {
@@ -73,7 +73,7 @@ export const connectRobot = createAsyncThunk(
   'robot/CONNECT',
   async ({ userId, serial }, { rejectWithValue }) => {
     try {
-      const { result, error } = await connectRobotBySerial({ userId, serial });
+      const { result, error } = await connectRobotsBySerial({ userId, serial });
       if(result) {
         return result;
       }
@@ -147,7 +147,8 @@ const robotSlice = createSlice({
     [getUser.fulfilled.type]: (state, action) => ({
       ...state,
       dataError: '',
-      data: action.payload,
+      data: action.payload.data,
+      params: action.payload.params,
     }),
     [getUser.rejected.type]: (state, action) => ({
       ...state,
@@ -245,7 +246,28 @@ export const textChange = (e) => (dispatch, getState) => {
   }
 }
 
-export const clearClick = (name) => (dispatch, getState) => {
+export const addSerialChange = (e, i) => (dispatch, getState) => {
+  const { robot } = getState();
+  const { params } = robot;
+  const { target: { value: v} } = e;
+  const value = v.replace(/[^a-zA-Z\d]/g, '');
+  const { robots } = params;
+  const newRobots = robots ? [...robots] : [value];
+  newRobots.splice(i, 1, value);
+  dispatch(setParams({ ...params, robots: newRobots }));
+}
+
+export const addTextField = () => (dispatch, getState) => {
+  const { robot } = getState();
+  const { params: { userId, robots } } = robot;
+  if(robots[robots.length - 1]) {
+    const newRobots = [...robots];
+    newRobots.push('');
+    dispatch(setParams({ userId, robots: newRobots }));
+  }
+}
+
+export const clearClick = (name, index) => (dispatch, getState) => {
   const { robot } = getState();
   const { menu, params } = robot;
 
@@ -260,6 +282,24 @@ export const clearClick = (name) => (dispatch, getState) => {
         return newPrev;
       }, {});
       dispatch(setClear(newParams));
+    } else if(name === 'robots') {
+      const { robots: r } = params;
+      const robots = r.reduce((prev, curr, i) => {
+        const arr = [...prev];
+        if(i === index && i !== r.length - 1) {
+          if(curr) {
+            arr.push('');
+          } else {
+            arr.splice(i, 1);
+          }
+        } else if(curr && i > 0) {
+          arr.push(curr);
+        } else {
+          arr.push(curr)
+        }
+        return arr;
+      }, []);
+      dispatch(setParams({ ...params, robots }))
     } else {
       dispatch(setParams({ [name]: '' }));
       dispatch(setError(''));
