@@ -24,7 +24,7 @@ const MENUS = [
     key: '02_user',
     value: 'user',
     label: '사용자',
-    desc: '사용자와 관련한 기능을 관리자가 직접 수행할 수 있습니다.',
+    desc: '사용자(User, Manager)와 관련한 기능을 관리자가 직접 수행할 수 있습니다.',
     list: [
       {path: 'signup', value: 'user_signup', label: '사용자 회원가입', desc: '최소한의 정보로 사용자 계정을 생성합니다.'},
       {path: 'password', value: 'user_update_pw', label: '사용자 비밀번호 변경', desc: '사용자의 물리적 또는 논리적 아이디로 해당 사용자의 비밀번호를 변경합니다.'},
@@ -37,7 +37,7 @@ const MENUS = [
     key: '03_redis',
     value: 'redis',
     label: 'redis 인증',
-    desc: 'redis 인증 정보를 조회 및 등록 할 수 있습니다.',
+    desc: 'redis 인증 정보를 조회 및 삭제 할 수 있습니다.',
     list: [
       // {path: 'find', value: 'redis_find', label: 'Redis 조회', desc: '사용자 및 로봇 정보로 Redis를 조회합니다.' },
       {path: 'add', value: 'redis_add', label: 'Redis 등록', desc: '사용자 및 로봇 정보를 Redis에 등록합니다.'},
@@ -135,6 +135,11 @@ const ROBOT_MENU_TRANSFER = 2;
 const ROBOT_MENU_CLEAR = 3;
 const REDIS_MENU_ADD=0;
 const REDIS_MENU_REMOVE=1;
+const USER_MENU_SIGNUP=0;
+const USER_MENU_PASSWORD=1;
+const USER_MENU_VERIFY=2;
+const USER_MENU_BAK=3;
+const USER_MENU_CLEAR=4;
 
 export {
   MENUS, 
@@ -146,4 +151,9 @@ export {
   ROBOT_MENU_CLEAR,
   REDIS_MENU_ADD,
   REDIS_MENU_REMOVE,
+  USER_MENU_SIGNUP,
+  USER_MENU_PASSWORD,
+  USER_MENU_VERIFY,
+  USER_MENU_BAK,
+  USER_MENU_CLEAR,
 };

@@ -24,7 +24,9 @@ const UserSignupContainer = () => {
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    dispatch(checkInfo({name, value}));
+    if(value) {
+      dispatch(checkInfo({name, value}));
+    }
   };
 
   const handleSignUp = () => {

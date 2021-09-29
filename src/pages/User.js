@@ -8,7 +8,7 @@ import UserClearDataContainer from '../containers/UserClearDataContainer';
 import UserUpdateBAKDataContainer from '../containers/UserUpdateBAKDataContainer';
 import UserSignupContainer from '../containers/UserSignupContainer';
 import { MENUS } from '../core/utils/consts';
-import { setMenu } from '../features/robot';
+import { setMenu } from '../features/user';
 
 const User = () => {
   const dispatch = useDispatch();

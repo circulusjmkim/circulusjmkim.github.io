@@ -5,6 +5,7 @@ import pageReducer from '../features/page';
 import noticeReducer from '../features/notice';
 import redisReducer from '../features/redis';
 import signupReducer from '../features/signup';
+import userReducer from '../features/user';
 
 export default combineReducers({
   page: pageReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   notice: noticeReducer,
   redis: redisReducer,
   signup: signupReducer,
+  user: userReducer,
 });
