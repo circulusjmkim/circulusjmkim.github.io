@@ -81,7 +81,7 @@ const UserUpdateVerifiedContainer = () => {
           <TextField
             id="standard-basic"
             className={classes.textField} 
-            label='인증 정보를 변경할 사용자의 ObjectId 또는 아이디를 입력하세요.'
+            label='인증 정보를 변경할 사용자의 아이디를 입력하세요.'
             onChange={handleTextChange} 
             value={words || ''}
             error={!!dataError}

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { clearUserData, findUserForRobotConnect, deleteAndBAKWithdrawUser, updateUserPassword, updateUserVerifiedInfo } from "../api/amapi";
+import { findUserForRobotConnect, deleteAndBAKWithdrawUser, updateUserPassword, updateUserVerifiedInfo, clearUserDataForTest } from "../api/amapi";
 import { USER_MENU_BAK, USER_MENU_CLEAR, USER_MENU_PASSWORD, USER_MENU_SIGNUP, USER_MENU_VERIFY } from "../core/utils/consts";
 
 export const getUser = createAsyncThunk(
@@ -20,9 +20,9 @@ export const getUser = createAsyncThunk(
 
 export const clearUser = createAsyncThunk(
   'user/CLEAR',
-  async (userId, { rejectWithValue }) => {
+  async ({userId, deleteUser }, { rejectWithValue }) => {
     try {
-      const { result, error } = await clearUserData({ userId });
+      const { result, error } = await clearUserDataForTest({ userId, deleteUser });
       if(result) {
         return result;
       }
@@ -198,7 +198,6 @@ export const textChange = (e) => (dispatch, getState) => {
   const { menu } = user;
   const { target: { value: v} } = e;
   const value = v.replace(/[^a-zA-Z\d]/g, '');
-  console.log(v, menu);
   if(menu !== USER_MENU_SIGNUP) {
     dispatch(setParams({ words: value }));
   }

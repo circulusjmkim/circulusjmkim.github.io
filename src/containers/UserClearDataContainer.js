@@ -27,8 +27,8 @@ const UserClearDataContainer = () => {
     dispatch(clearClick(e));
   };
 
-  const handleClearUserClick = (userId) => () => {
-    dispatch(clearUser(userId));
+  const handleClearUserClick = (userId, deleteUser=false) => () => {
+    dispatch(clearUser({ userId, deleteUser }));
   };
 
   useUpdateEffect(() => {
@@ -54,7 +54,7 @@ const UserClearDataContainer = () => {
           <TextField
             id="standard-basic"
             className={classes.textField} 
-            label='사용자의 ObjectId 또는 아이디를 입력하세요.'
+            label='사용자의 아이디를 입력하세요.'
             onChange={handleTextChange} 
             value={words || ''}
             error={!!dataError}
@@ -180,7 +180,8 @@ const UserClearDataContainer = () => {
               {
                 !result && (
                   <CardActions>
-                    <Button size="small" className={classes.btnDisconnect} onClick={handleClearUserClick(id)}>데이터 클리어</Button>
+                    <Button size="small" className={classes.btnDisconnect} onClick={handleClearUserClick(id, true)}>데이터 초기화 및 삭제</Button>
+                    <Button size="small" className={classes.btnDisconnect} onClick={handleClearUserClick(id)}>데이터 초기화</Button>
                   </CardActions>
                 )
               }
