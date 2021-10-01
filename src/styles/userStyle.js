@@ -14,6 +14,10 @@ export const useStyles = makeStyles((theme) => ({
   marginVertical: {
     margin: 'auto 0',
   },
+  halfTextField: {
+    margin: theme.spacing(1),
+    width: '21.5ch',
+  },
   marginTextField: {
     margin: theme.spacing(1),
     width: '45ch',
@@ -32,5 +36,11 @@ export const useStyles = makeStyles((theme) => ({
   signupButton: {
     margin: theme.spacing(1),
     width: '45ch',
+  },
+  toggleWrap: {
+    margin: theme.spacing(2),
+  },
+  switch: {
+    margin: theme.spacing(1)
   }
 }));

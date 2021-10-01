@@ -3,7 +3,7 @@ import { Grid, Typography } from '@material-ui/core';
 import { useToggle, useUpdateEffect } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from '../styles/userStyle';
-import { checkId, checkInfo, initialize, signUp, textChange } from '../features/signup';
+import { checkId, checkInfo, initialize, setToggle, signUp, textChange } from '../features/signup';
 import SignUpForm from '../components/SignUpForm';
 
 const UserSignupContainer = () => {
@@ -20,6 +20,10 @@ const UserSignupContainer = () => {
 
   const handleChange = (e) => {
     dispatch(textChange(e));
+  };
+
+  const handleToggleChange = () => {
+    dispatch(setToggle());
   };
 
   const handleBlur = (e) => {
@@ -52,7 +56,11 @@ const UserSignupContainer = () => {
         if(typeof curr === 'object') return Object.values(curr).reduce((p, c) => c ? !!p : false, true);
         return false;
       }, true);
-      const errorResult = Object.values(error).reduce((prev, curr) => !!curr || prev, false);
+
+      let errorResult = false;
+      if (error !== null && error !== false) {
+        errorResult = Object.values(error).reduce((prev, curr) => !!curr || prev, false);
+      }
       setEnable(result && !errorResult);
     } else {
       setEnable(false);
@@ -61,13 +69,13 @@ const UserSignupContainer = () => {
 
   return (
     <Grid container direction="column" justifyContent="flex-start" className={classes.root}>
-    {!saved && <SignUpForm {...{ classes, error, data, idChecked, visible, enable, handleSignUp, handleVisible, handleBlur, handleChange, handleDuplicateCheck}} />}
+    {!saved && <SignUpForm {...{ classes, error, data, idChecked, visible, enable, handleSignUp, handleVisible, handleBlur, handleChange, handleToggleChange, handleDuplicateCheck}} />}
     {saved && (
       <>
         <Typography variant="body1" color="textPrimary">회원가입이 완료되었습니다.😉</Typography>
         <Typography variant="body2" color="textSecondary">메시지는 자동으로 사라집니다.</Typography>
       </>)}
-    {saved && (<Grid item xs={12}>
+    {saved === false && (<Grid item xs={12}>
         <Typography variant="h6">{error}</Typography>
       </Grid>)}
   </Grid>

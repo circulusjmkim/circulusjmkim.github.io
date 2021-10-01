@@ -92,20 +92,21 @@ export const signUp = createAsyncThunk(
 
 const initialState = {
   loading: false,
-  data: { userId: '', password: '', lastName: '', firstName: '', email: '', tel: '', birthDate: moment().format('YYYY-MM-DD'), verified: {email: false, tel: false}},
+  bManager: false,
+  data: { userId: '', password: '', lastName: '', firstName: '', email: '', tel: '', birthDate: moment().format('YYYY-MM-DD'), verified: {email: false, tel: false}, role: '0000'},
   idChecked: false,
   error: null,
-  saved: false,
+  saved: null,
 };
 
 const signupSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    initialize: (state) => ({...initialState, menu: state.menu, bUser: state.bUser, data: state.bUser ? {userId: '', userPId: ''}:{robotId: '', robotPId: ''} }),
-    setToggle: (state) => ({...state, bUser: !state.bUser, data: !state.bUser ? { userId: '', userPId: ''} : {robotId: '', robotPId: ''}}),
-    setParams: (state, action) => ({...state, data: {...state.data, ...action.payload}}),
-    setClear: (state, action) => ({...initialState, menu: state.menu, data: action.payload}),
+    initialize: () => ({...initialState, }),
+    setToggle: (state) => ({...state, bManager: !state.bManager, data: {...state.data, role: !state.bManager?'0110':'0000'}}),
+    setParams: (state, action) => ({...state, data: {...state.data, ...action.payload}, }),
+    setClear: (state, action) => ({...initialState, menu: state.menu, data: action.payload, }),
     setError: (state, action) => ({...state, error: action.payload}),
     initChecked: (state) => ({...state, idChecked: !state.idChecked}),
   },

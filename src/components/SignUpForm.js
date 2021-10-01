@@ -1,12 +1,13 @@
-import { Button, FormControl, FormHelperText, Grid, IconButton, Input, InputAdornment, InputLabel, TextField } from '@material-ui/core';
+import { Button, FormControl, FormGroup, FormHelperText, Grid, IconButton, Input, InputAdornment, InputLabel, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import CheckIcon from '@material-ui/icons/Check';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import EnvSelect from './EnvSelect';
+import AntSwitch from './AntSwitch';
 
-const SignUpForm = ({ classes, error, data, idChecked, visible, enable, handleSignUp, handleVisible, handleBlur, handleChange, handleDuplicateCheck}) => (
+const SignUpForm = ({ classes, error, data, bManager, idChecked, visible, enable, handleSignUp, handleVisible, handleBlur, handleChange, handleToggleChange, handleDuplicateCheck}) => (
   <Grid container
       direction="row"
       justifyContent="flex-start"
@@ -17,7 +18,19 @@ const SignUpForm = ({ classes, error, data, idChecked, visible, enable, handleSi
         <Grid item xs={6} md={2} className={classes.marginVertical}>
           <EnvSelect/>
         </Grid>
-        <Grid item xs={6} md={8} />
+        <Grid item xs={6} md={8} className={classes.toggleWrap}>
+          <FormGroup>
+            <Typography component="div">
+              <Grid component="label" container item alignItems="center" spacing={1}>
+                <Grid item>일반</Grid>
+                <Grid item>
+                  <AntSwitch checked={bManager} onChange={handleToggleChange} className={classes.switch} />
+                </Grid>
+                <Grid item>매니저</Grid>
+              </Grid>
+            </Typography>
+          </FormGroup>
+        </Grid>
         <Grid item container xs={12} className={classes.margin}>
           <Grid item>
             <FormControl className={classes.marginTextField} error={error && error.userId}>
@@ -76,7 +89,7 @@ const SignUpForm = ({ classes, error, data, idChecked, visible, enable, handleSi
         </Grid>
         <Grid item container xs={12} className={classes.margin}>
           <Grid item>
-            <FormControl className={classes.marginTextField} error={error && error.lastName}>
+            <FormControl className={classes.halfTextField} error={error && error.lastName}>
               <InputLabel htmlFor="lastname" name="lastName" shrink>성</InputLabel>
               <Input
                 id="lastname"
@@ -90,9 +103,7 @@ const SignUpForm = ({ classes, error, data, idChecked, visible, enable, handleSi
               />
               <FormHelperText>{error && error.lastName}</FormHelperText> 
             </FormControl>
-          </Grid>
-          <Grid item>
-          <FormControl className={classes.marginTextField} error={error && error.firstName}>
+            <FormControl className={classes.halfTextField} error={error && error.firstName}>
             <InputLabel htmlFor="firstname" name="firstName" shrink>이름</InputLabel>
             <Input
               id="firstname"
@@ -106,7 +117,24 @@ const SignUpForm = ({ classes, error, data, idChecked, visible, enable, handleSi
             />
             <FormHelperText>{error && error.firstName}</FormHelperText>
           </FormControl>
-        </Grid>
+          </Grid>
+          <Grid item>
+            <FormControl error={error && error.birthDate}>
+              <TextField
+                id="date"
+                name="birthDate"
+                label="생년월일"
+                type="date"
+                defaultValue={data.birthDate}
+                className={classes.marginTextField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={handleChange}
+              />
+            <FormHelperText>{error && error.birthDate}</FormHelperText>
+            </FormControl>
+          </Grid>
         </Grid>
         <Grid item container xs={12} className={classes.margin}>
           <Grid item>
@@ -145,23 +173,7 @@ const SignUpForm = ({ classes, error, data, idChecked, visible, enable, handleSi
             </FormControl>
           </Grid>
         </Grid>
-        <Grid item xs={12} className={classes.margin}>
-          <FormControl error={error && error.birthDate}>
-            <TextField
-              id="date"
-              name="birthDate"
-              label="생년월일"
-              type="date"
-              defaultValue={data.birthDate}
-              className={classes.marginTextField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={handleChange}
-            />
-            <FormHelperText>{error && error.birthDate}</FormHelperText>
-          </FormControl>
-        </Grid>
+        
         <Grid item xs={12} className={classes.margin}>
           <Button variant="contained" color="primary" className={classes.signupButton} disabled={!enable} onClick={handleSignUp}>회원가입</Button>
         </Grid>
