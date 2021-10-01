@@ -13,11 +13,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnvSelect = ({label}) => {
+const EnvSelect = ({label, onChange}) => {
   const classes = useStyles();
   const [env, setEnv] = useState(localStorage.getItem('env') || 'ops');
 
   const handleChange = (e, {props: {value}}) => {
+    if(onChange) {
+      onChange(e);
+    }
     setEnv(value);
   };
 

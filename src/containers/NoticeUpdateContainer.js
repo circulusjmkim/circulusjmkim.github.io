@@ -189,7 +189,7 @@ const NoticeUpdateContainer = () => {
     justifyContent="flex-start"
     className={classes.root}
   >
-    {!editMode && <NoticeList {...{list, headers, limit, error, visible: list.length > 0}} />}
+    {!editMode && <NoticeList {...{list, headers, limit, error, visible: list.length > 0, handleListInit}} />}
     {editMode && <NoticeForm {...{label: '수정', fixed, order, title, content, error, handleInit, handleClick, setContent, handleCheckChange, handleTitleChange, handleClickClear}} />}
     {
       editMode && saved && (
