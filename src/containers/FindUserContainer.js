@@ -308,8 +308,8 @@ const FindUserContainer = () => {
                   <TableCell>{row.nickName}</TableCell>
                   <TableCell>{row.gender}</TableCell>
                   <TableCell className={classes.tableNoWrap}>{moment(new Date(row.birthDate)).format('YYYY-MM-DD')}</TableCell>
-                  <TableCell className={classes.tableNoWrap}>{row.verified.email && <VerifiedUserIcon fontSize="small" color="secondary"/>}{'email' in row ? row.email:''}</TableCell>
-                  <TableCell className={classes.tableNoWrap}>{row.verified.tel && <VerifiedUserIcon fontSize="small" color="secondary" />}{row.tel || ''}</TableCell>
+                  <TableCell className={classes.tableNoWrap}>{row.verified && 'email' in row.verified && <VerifiedUserIcon fontSize="small" color="secondary"/>}{'email' in row ? row.email:''}</TableCell>
+                  <TableCell className={classes.tableNoWrap}>{row.verified && 'tel' in row.verified && <VerifiedUserIcon fontSize="small" color="secondary" />}{row.tel || ''}</TableCell>
                   <TableCell className={classes.tableNoWrap}>{moment(new Date(row.firstTime)).format('YYYY-MM-DD HH:mm')}</TableCell>
                   <TableCell className={classes.tableNoWrap}>{moment(new Date(row.lastTime)).format('YYYY-MM-DD HH:mm')}</TableCell>
                   <TableCell>{!row.use && '탈퇴'}</TableCell>
