@@ -217,9 +217,9 @@ export const { initialize, setMenu, setParams, setClear, setError } = actions;
 export const findClick = () => (dispatch, getState)=> {
   const { robot } = getState();
   const { menu, params } = robot;
-  if(menu === ROBOT_MENU_DISCONNECT || menu === ROBOT_MENU_CLEAR) {
-    const { words } = params;
-    dispatch(getRobot({params: words, use: (menu === ROBOT_MENU_DISCONNECT)}));
+  const { words } = params;
+  if(menu === ROBOT_MENU_DISCONNECT) {
+    dispatch(getRobot({params: words, use: true}));
   }
   if(menu === ROBOT_MENU_CONNECT) {
     const { userId } = params;
@@ -229,7 +229,10 @@ export const findClick = () => (dispatch, getState)=> {
     const { beforeSerial } = params;
     dispatch(getRobot({params: beforeSerial, use: true}));
   }
-}
+  if(menu === ROBOT_MENU_CLEAR) {
+    dispatch(getRobot({params: words}));
+  }
+};
 
 export const textChange = (e) => (dispatch, getState) => {
   const { robot } = getState();
@@ -244,7 +247,7 @@ export const textChange = (e) => (dispatch, getState) => {
   if(menu === ROBOT_MENU_TRANSFER || menu === ROBOT_MENU_CONNECT) {
     dispatch(setParams({ [name]: value }));
   }
-}
+};
 
 export const addSerialChange = (e, i) => (dispatch, getState) => {
   const { robot } = getState();
@@ -255,7 +258,7 @@ export const addSerialChange = (e, i) => (dispatch, getState) => {
   const newRobots = robots ? [...robots] : [value];
   newRobots.splice(i, 1, value);
   dispatch(setParams({ ...params, robots: newRobots }));
-}
+};
 
 export const addTextField = () => (dispatch, getState) => {
   const { robot } = getState();
@@ -265,7 +268,7 @@ export const addTextField = () => (dispatch, getState) => {
     newRobots.push('');
     dispatch(setParams({ userId, robots: newRobots }));
   }
-}
+};
 
 export const clearClick = (name, index) => (dispatch, getState) => {
   const { robot } = getState();
@@ -305,6 +308,6 @@ export const clearClick = (name, index) => (dispatch, getState) => {
       dispatch(setError(''));
     }
   }
-}
+};
 
 export default robotReducer;
