@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useMount, useUpdateEffect } from 'react-use';
 import ClearIcon from '@material-ui/icons/Clear';
 import EnvSelect from '../components/EnvSelect';
-import { initialize, findClick, textChange, clearClick, clearUser } from '../features/user';
+import { initialize, findClick, textChange, clearClick, deletedBAKUser } from '../features/user';
 import { useStyles } from '../styles/robotStyle';
 
 const UserUpdateBAKDataContainer = () => {
@@ -27,8 +27,8 @@ const UserUpdateBAKDataContainer = () => {
     dispatch(clearClick(e));
   };
 
-  const handleClearUserClick = (userId) => () => {
-    dispatch(clearUser(userId));
+  const handleBAKUserClick = ({id, role}) => () => {
+    dispatch(deletedBAKUser({id, role}));
   };
 
   useUpdateEffect(() => {
@@ -54,7 +54,7 @@ const UserUpdateBAKDataContainer = () => {
           <TextField
             id="standard-basic"
             className={classes.textField} 
-            label='사용자의 ObjectId 또는 아이디를 입력하세요.'
+            label='사용자의 아이디를 입력하세요.'
             onChange={handleTextChange} 
             value={words || ''}
             error={!!dataError}
@@ -74,7 +74,7 @@ const UserUpdateBAKDataContainer = () => {
           />
         </Grid>
         <Grid item className={classes.marginVertical}>
-          <Button variant="contained" color="primary"  onClick={handleFindClick}>검색</Button>
+          <Button variant="contained" color="primary" onClick={handleFindClick}>검색</Button>
         </Grid>
       </Grid>
       {dataError && (<Grid item xs={12}>
@@ -82,8 +82,8 @@ const UserUpdateBAKDataContainer = () => {
       </Grid>)}
       <Grid container item xs={12} className={classes.cardGrid} spacing={1}> 
         {data.map(({ id, userId, role, use }) => (
-          <Grid item>
-            <Card className={classes.cardRoot} key={id}>
+          <Grid item key={id}>
+            <Card className={classes.cardRoot}>
               <CardContent>
                 {
                   !result && (
@@ -182,7 +182,7 @@ const UserUpdateBAKDataContainer = () => {
               {
                 !result && (
                   <CardActions>
-                    <Button size="small" className={classes.btnDisconnect} onClick={handleClearUserClick(id)}>데이터 이전</Button>
+                    <Button size="small" className={classes.btnDisconnect} onClick={handleBAKUserClick({id, role})}>데이터 이전</Button>
                   </CardActions>
                 )
               }

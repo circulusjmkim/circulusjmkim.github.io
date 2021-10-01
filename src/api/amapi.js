@@ -29,8 +29,8 @@ export const deleteTempUser = async ({ userId }) => {
   return result;
 };
 
-export const deleteAndBAKWithdrawUser = async ({ userId }) => {
-  const result = await getFetchResult(`users`, DELETE, { userId });
+export const deleteAndBAKWithdrawUser = async ({ userId, role }) => {
+  const result = await getFetchResult(`user`, DELETE, { userId, role });
   return result;
 };
 

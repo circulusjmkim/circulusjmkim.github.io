@@ -35,11 +35,12 @@ export const clearUser = createAsyncThunk(
     }
   },
 );
+
 export const deletedBAKUser = createAsyncThunk(
   'user/DELETE_BAK',
-  async (userId, { rejectWithValue }) => {
+  async ({id, role}, { rejectWithValue }) => {
     try {
-      const { result, error } = await deleteAndBAKWithdrawUser({ userId });
+      const { result, error } = await deleteAndBAKWithdrawUser({ userId: id, role });
       if(result) {
         return result;
       }
@@ -147,6 +148,17 @@ const userSlice = createSlice({
       result: action.payload,
     }),
     [updateVerifiedInfo.rejected.type]: (state, action) => ({
+      ...state,
+      result: false,
+      error: action.payload,
+    }),
+    [deletedBAKUser.pending.type]: state => ({ ...state, result: null, error: ''}),
+    [deletedBAKUser.fulfilled.type]: (state, action) => ({
+      ...state,
+      error: '',
+      result: action.payload,
+    }),
+    [deletedBAKUser.rejected.type]: (state, action) => ({
       ...state,
       result: false,
       error: action.payload,
