@@ -16,9 +16,6 @@ const RedisAddContainer = () => {
   useEffect(() => {
     const value = Object.entries(params).reduce((prev, curr) => {
       const [k, v] = curr;
-      if(k.indexOf('PId') > 0) {
-        return prev && v.length === 24;
-      } 
       if(k.indexOf('user') === 0) {
         return prev && v.length >= 4;
       }

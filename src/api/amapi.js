@@ -82,13 +82,13 @@ export const clearUserDataForTest = async ({userId, deleteUser}) => {
   return result;
 };
 
-export const registerRedis = async ({ userId, userPId, robotId, robotPId }) => {
-  const result = await getFetchResult(`redis`, POST, { userId, userPId, robotId, robotPId });
+export const registerRedis = async ({ userId, robotId }) => {
+  const result = await getFetchResult(`redis`, POST, { userId, robotId });
   return result;
 };
 
-export const unregisterRedis = async ({ userPId, robotPId }) => {
-  const result = await getFetchResult(`redis`, DELETE, { userPId, robotPId });
+export const unregisterRedis = async ({ userId, robotId }) => {
+  const result = await getFetchResult(`redis`, DELETE, { userId, robotId });
   return result;
 };
 

@@ -55,7 +55,7 @@ const RedisFindContainer = () => {
           <TextField
             id="standard-basic"
             className={classes.textField} 
-            label={bUser?'사용자의 ObjectId 또는 아이디를 입력하세요.':'로봇의 ObjectId 또는 Serial No.를 입력하세요.'}
+            label={bUser?'사용자의 아이디를 입력하세요.':'로봇의 ObjectId 또는 Serial No.를 입력하세요.'}
             onChange={handleTextChange} 
             // value={words || ''}
             // error={dataError}

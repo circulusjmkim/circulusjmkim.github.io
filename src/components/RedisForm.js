@@ -32,7 +32,7 @@ const RedisForm = ({remove, classes, enabled, bUser, params, error, handleButton
       </Grid>
       <Grid item xs={12} style={{display: 'inline-flex'}}>
         <Box display="flex" flexDirection="column">
-          {!remove && (<TextField
+          <TextField
             id="logical"
             name="logical"
             className={classes.textField} 
@@ -53,8 +53,8 @@ const RedisForm = ({remove, classes, enabled, bUser, params, error, handleButton
               </IconButton>
             </InputAdornment>)
             }}
-          />)}
-          <TextField
+          />
+          {/* <TextField
             id="physical"
             name="physical"
             className={classes.textField} 
@@ -75,7 +75,7 @@ const RedisForm = ({remove, classes, enabled, bUser, params, error, handleButton
               </IconButton>
             </InputAdornment>)
             }}
-          />
+          /> */}
         </Box>
       </Grid>
       <Grid item xs={12} className={classes.marginVertical}>

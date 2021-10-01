@@ -48,15 +48,15 @@ const initialState = {
   bUser: false,
   result: null,
   error: '',
-  params: { robotId: '', robotPId: '' },
+  params: { robotId: '' },
 };
 
 const redisSlice = createSlice({
   name: 'redis',
   initialState,
   reducers: {
-    initialize: (state) => ({...initialState, menu: state.menu, bUser: state.bUser, params: state.bUser ? {userId: '', userPId: ''}:{robotId: '', robotPId: ''} }),
-    setToggle: (state) => ({...state, bUser: !state.bUser, params: !state.bUser ? { userId: '', userPId: ''} : {robotId: '', robotPId: ''}}),
+    initialize: (state) => ({...initialState, menu: state.menu, bUser: state.bUser, params: state.bUser ? {userId: ''}:{robotId: ''} }),
+    setToggle: (state) => ({...state, bUser: !state.bUser, params: !state.bUser ? { userId: ''} : {robotId: ''}}),
     setParams: (state, action) => ({...state, error: '', params: {...state.params, ...action.payload}}),
     setClear: (state, action) => ({...initialState, menu: state.menu, params: action.payload}),
     setError: (state, action) => ({...state, error: action.payload}),
@@ -98,9 +98,9 @@ export const textChange = (e, bUser) => (dispatch) => {
   if(n === 'logical') {
     name += 'Id';
   }
-  if(n === 'physical') {
-    name += 'PId';
-  }
+  // if(n === 'physical') {
+  //   name += 'PId';
+  // }
 
   dispatch(setParams({ [name]: value }));
 }
@@ -111,9 +111,9 @@ export const clearClick = (e, bUser) => (dispatch) => {
   if(n === 'logical') {
     name += 'Id';
   }
-  if(n === 'physical') {
-    name += 'PId';
-  }
+  // if(n === 'physical') {
+  //   name += 'PId';
+  // }
   dispatch(setParams({ [name]: '' }));
 }
 
