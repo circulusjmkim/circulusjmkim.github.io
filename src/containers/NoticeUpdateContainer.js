@@ -125,7 +125,6 @@ const NoticeUpdateContainer = () => {
   };
 
   const handleDeleteDialog = (id) => () => {
-    console.log(id);
     setOpen({ open: true, selectId: id });
   };
   

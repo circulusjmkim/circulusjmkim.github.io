@@ -76,7 +76,6 @@ export const signUp = createAsyncThunk(
       const { signup } = getState();
       const { data } = signup;
       const { result, error } = await userSignUp(data);
-      console.log(result);
       if(result) {
         return result;
       }

@@ -42,7 +42,6 @@ export const deleteItem = createAsyncThunk(
   'notice/DELETE',
   async ({ id, strict }, { rejectWithValue }) => {
     try {
-      console.log('notice/DELETE', id, strict);
       const { result, error } = await deleteNotice({ id, strict });
       if(result) {
         return result;
