@@ -26,8 +26,8 @@ const RobotTransferDataContainer = () => {
     dispatch(clearClick(name));
   }
 
-  const handleTransferClick = (userId) => () => {
-    dispatch(transfertData({ serial: beforeSerial, newSerial: afterSerial, userId }));
+  const handleTransferClick = ({userId, serial}) => () => {
+    dispatch(transfertData({ serial, newSerial: afterSerial, userId }));
   };
 
   useUpdateEffect(() => {
@@ -169,7 +169,7 @@ const RobotTransferDataContainer = () => {
                 {
                   !result && (
                     <CardActions>
-                      <Button size="small" color="secondary" className={classes.btn} onClick={handleTransferClick(userId)}>데이터 이전</Button>
+                      <Button size="small" color="secondary" className={classes.btn} onClick={handleTransferClick({userId, serial: robotId})}>데이터 이전</Button>
                     </CardActions>
                   )
                 }
