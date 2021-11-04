@@ -28,7 +28,7 @@ const MENUS = [
     list: [
       {path: 'signup', value: 'user_signup', label: '사용자 회원가입', desc: '최소한의 정보로 사용자 계정을 생성합니다.'},
       {path: 'password', value: 'user_update_pw', label: '사용자 비밀번호 변경', desc: '사용자의 아이디로 해당 사용자의 비밀번호를 변경합니다.'},
-      {path: 'verify', value: 'user_update_verified', label: '사용자 인증정보 변경', desc: '사용자의 아이디로 해당 사용자의 인증정보(tel, email) 정보를 변경합니다.'},
+      {path: 'verify', value: 'user_update_verified', label: '사용자 인증정보 변경', desc: '사용자의 인증정보(tel, email)를 검색하여 해당 정보를 변경합니다.'},
       {path: 'delete', value: 'user_update_bakdata', label: '사용자 탈퇴 정보 삭제 및 백업', desc: '한달 간격으로 이루어지는 탈퇴 사용자에 대한 정보 백업을 탈퇴 회원 정보로 조회하여 즉시 실행합니다.\n*(탈퇴한 아이디, 이메일, 전화번호 등의 재사용 요청 시 사용)'},
       {path: 'clear', value: 'user_clear_data', label: '사용자 데이터 클리어', desc: '사용자의 아이디와 관련된 모든 데이터(사용자의 로봇, 로봇에 설치된 bot 정보, 설치된 bot의 모든 연관 데이터)를 삭제합니다. 사용자 계정도 선택하여 삭제 할 수 있습니다.\n*테스트 데이터 삭제에만 사용할 것을 권장합니다.'},
     ]

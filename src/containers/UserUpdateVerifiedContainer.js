@@ -31,9 +31,9 @@ const UserUpdateVerifiedContainer = () => {
     setValue({tel: '', email: ''});
   };
 
-  const handleUpdateClick = () => {
+  const handleUpdateClick = (userId) => () => {
     const { tel, email } = data[0];
-    const obj = { userId: words, tel: v.tel || tel, email: v.email || email};
+    const obj = { userId, tel: v.tel || tel, email: v.email || email};
     dispatch(updateVerifiedInfo(obj));
   };
 
@@ -81,7 +81,7 @@ const UserUpdateVerifiedContainer = () => {
           <TextField
             id="standard-basic"
             className={classes.textField} 
-            label='인증 정보를 변경할 사용자의 아이디를 입력하세요.'
+            label='변경할 인증 정보(전화번호, 이메일)를 입력하세요.'
             onChange={handleTextChange} 
             value={words || ''}
             error={!!dataError}
@@ -91,7 +91,7 @@ const UserUpdateVerifiedContainer = () => {
             InputProps={{
               endAdornment: (<InputAdornment position="end">
               <IconButton
-                aria-label="user id input value clear"
+                aria-label="user info input value clear"
                 onClick={handleClickClear}
               >
                 <ClearIcon />
@@ -241,7 +241,7 @@ const UserUpdateVerifiedContainer = () => {
               {
                 !result && (
                   <CardActions>
-                    <Button size="small" color="primary" onClick={handleUpdateClick}>인증정보 변경</Button>
+                    <Button size="small" color="primary" onClick={handleUpdateClick(userId)}>인증정보 변경</Button>
                   </CardActions>
                 )
               }

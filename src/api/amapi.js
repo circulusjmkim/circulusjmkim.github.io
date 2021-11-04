@@ -67,8 +67,8 @@ export const transferRobotData = async ({ userId, serial, newSerial }) => {
   const result = await getFetchResult(`replaceRobot`, POST, { userId, serial, newSerial });
   return result;
 };
-export const findUserForRobotConnect = async ({ userId, use }) => {
-  const result = await getFetchResult(`findUserByUserId?${encodeGetParams({userId, use})}`, GET);
+export const findUserForRobotConnect = async (params) => {
+  const result = await getFetchResult(`findUser?${encodeGetParams(params)}`, GET);
   return result;
 };
 

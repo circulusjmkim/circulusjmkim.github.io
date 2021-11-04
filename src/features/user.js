@@ -4,11 +4,18 @@ import { USER_MENU_BAK, USER_MENU_CLEAR, USER_MENU_PASSWORD, USER_MENU_SIGNUP, U
 
 export const getUser = createAsyncThunk(
   `user/GET_USER`,
-  async ({ userId, use }, { rejectWithValue }) => {
+  async ({ userId, tel, email, use }, { rejectWithValue }) => {
     try {
-      const params = use !== undefined ? {userId, use} : {userId}
+      let params;
+      if(userId) {
+        params = use !== undefined ? {userId, use} : {userId};
+      }
+      if(tel || email) {
+        params = { tel, email };
+      }
       const { result, data } = await findUserForRobotConnect(params);
       if(result) {
+        if(data.length === 0) return rejectWithValue('🙅 검색 결과가 존재하지 않습니다.');
         return data;
       }
       return rejectWithValue('😥 목록 조회 실패');
@@ -104,12 +111,12 @@ const userSlice = createSlice({
   reducers: {
     initialize: (state) => ({...initialState, menu: state.menu }),
     setMenu: (state, action) => ({...state, menu: action.payload}),
-    setParams: (state, action) => ({...state, params: {...state.params, ...action.payload}}),
+    setParams: (state, action) => ({...state, dataError: '', params: {...state.params, ...action.payload}}),
     setClear: (state, action) => ({...initialState, menu: state.menu, params: action.payload}),
     setError: (state, action) => ({...state, error: action.payload}),
   },
   extraReducers: {
-    [getUser.pending.type]: state => ({ ...state, dataError: ''}),
+    [getUser.pending.type]: state => ({ ...state, dataError: '', data: []}),
     [getUser.fulfilled.type]: (state, action) => ({
       ...state,
       dataError: '',
@@ -183,12 +190,14 @@ export const { initialize, setMenu, setParams, setClear, setError } = actions;
 export const findClick = () => (dispatch, getState)=> {
   const { user } = getState();
   const { menu, params } = user;
-  if(menu === USER_MENU_PASSWORD || menu === USER_MENU_CLEAR || menu === USER_MENU_VERIFY) {
-    const { words } = params;
+  const { words } = params;
+  if(menu === USER_MENU_VERIFY) {
+    dispatch(getUser({ tel: words, email: words }));
+  }
+  if(menu === USER_MENU_PASSWORD || menu === USER_MENU_CLEAR) {
     dispatch(getUser({ userId: words }));
   }
   if(menu === USER_MENU_BAK) {
-    const { words } = params;
     dispatch(getUser({ userId: words, use: false }));
   }
  }
