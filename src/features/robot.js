@@ -26,10 +26,7 @@ export const getRobot = createAsyncThunk(
     ) {
       bObjectId = true;
     }
-    if (
-      params.length === 16 &&
-      /^10000000{1}(\d+[a-f]|[a-f]+\d{8})/i.test(params)
-    ) {
+    if (params.length === 16 && /^10000000{1}([\w\d]{8}$)/i.test(params)) {
       bSerial = true;
     }
     if (!bSerial && params.length === 8 && /^(?!0)[\w\d]{8}$/i.test(params)) {
