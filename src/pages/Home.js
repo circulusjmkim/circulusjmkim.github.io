@@ -1,8 +1,6 @@
 import React from 'react';
-import { Container, makeStyles, Typography } from '@material-ui/core';
-// import { Chip, Container, makeStyles, Typography } from '@material-ui/core';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-// import { useHistory } from 'react-router';
+import { Container, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 const useHomeStyle = makeStyles((theme) => ({
   root: {
@@ -39,7 +37,8 @@ const Home = () => {
     <div className={classes.root}>
       <Container maxWidth="sm" className={classes.container}>
         <Typography variant="h4" style={{ textAlign: 'center' }}>
-          파이보 모바일과 관련된 사용자, 로봇, 공지사항을 관리할 수 있는 관리자 페이지입니다.
+          파이보 모바일과 관련된 사용자, 로봇, 공지사항을 관리할 수 있는 관리자
+          페이지입니다.
         </Typography>
         {/* <Chip
           label="로그인"

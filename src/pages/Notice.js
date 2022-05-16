@@ -11,22 +11,24 @@ const Notice = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { pathname } = useLocation();
-  const { item } = useSelector(state => state.page);
+  const { item } = useSelector((state) => state.page);
 
   useEffect(() => {
     let index = 0;
-    if(item >= 0) {
+    if (item >= 0) {
       index = item;
     }
-    const menu = MENUS[4].list[index].path;
+    const menu = MENUS[3].list[index].path;
     dispatch(setMenu(item));
     history.replace(`${pathname}?menu=${menu}`);
   }, [item]);
 
-  return (<>
-    {item === 0 && <NoticeAddContainer /> }
-    {item === 1 && <NoticeUpdateContainer /> }
-  </>);
+  return (
+    <>
+      {item === 0 && <NoticeAddContainer />}
+      {item === 1 && <NoticeUpdateContainer />}
+    </>
+  );
 };
 
 export default Notice;

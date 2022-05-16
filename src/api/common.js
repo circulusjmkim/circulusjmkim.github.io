@@ -1,16 +1,19 @@
 // import axios from 'axios';
 
 // const SITE_URL = 'http://localhost:3000/';
-const SITE_URL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:3000':'https://circulusjmkim.github.io';
+const SITE_URL =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3001'
+    : 'https://circulusjmkim.github.io';
 const API_URL = (env) => {
-  if(process.env.NODE_ENV !== 'production') {
-    return 'http://0.0.0.0:57703/v1/admin/';
+  if (process.env.NODE_ENV !== 'production') {
+    return 'http://0.0.0.0:58791/v1/';
   }
-  if(env) {
-    return `https://${env}-mapi.circul.us/v1/admin/`;
+  if (env) {
+    return `https://${env}-zapi.circul.us/v1/`;
   }
-  return `https://stg-mapi.circul.us/v1/admin/`;
-}
+  return `https://stg-zapi.circul.us/v1/`;
+};
 const publishDate = '2107161406';
 
 export const POST = 'POST';
@@ -42,7 +45,7 @@ export const setAPI = (path, method, body) => {
           method,
           mode: 'cors',
           headers: {
-            'Accept': 'application/json, text/plain, */*',
+            Accept: 'application/json, text/plain, */*',
             'Access-Control-Allow-Origin': SITE_URL,
             'Access-Control-Allow-Methods': method,
             'Content-Type': 'application/json',

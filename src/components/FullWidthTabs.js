@@ -3,8 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@material-ui/core/styles';
-import { AppBar, Tabs, Tab, Typography, Box, Grid } from '@material-ui/core';
+import { useTheme } from '@mui/styles';
+import { AppBar, Box, Grid, Tab, Tabs, Typography } from '@mui/material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,9 +62,9 @@ const FullWidthTabs = ({ list, onChange, value, classes }) => {
             variant="fullWidth"
             aria-label="full width tabs"
           >
-            {
-              list.map(({ label, value:v }, i) => (<Tab {...{...a11yProps(i), label, key: v}} />))
-            }
+            {list.map(({ label, value: v }, i) => (
+              <Tab {...{ ...a11yProps(i), label, key: v }} />
+            ))}
           </Tabs>
         </AppBar>
         <SwipeableViews
@@ -72,13 +72,15 @@ const FullWidthTabs = ({ list, onChange, value, classes }) => {
           index={value}
           onChangeIndex={handleChangeIndex}
         >
-          {
-            list.map(({value: v, label}, index) => <TabPanel {...{value: v, index, dir:theme.direction, key:v}}>{label}</TabPanel>)
-          }
+          {list.map(({ value: v, label }, index) => (
+            <TabPanel {...{ value: v, index, dir: theme.direction, key: v }}>
+              {label}
+            </TabPanel>
+          ))}
         </SwipeableViews>
       </div>
     </Grid>
   );
-}
+};
 
 export default FullWidthTabs;

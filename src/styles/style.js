@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { lighten, makeStyles, withStyles, Tab, Tabs } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import { makeStyles, withStyles } from '@mui/styles';
+import { lighten, Tab, Tabs } from '@mui/material';
+import { grey } from '@mui/material/colors';
+
 import BgLogo from '../assets/bg_logo.png';
 
 const tagLabel = (theme) => ({
@@ -22,20 +24,22 @@ const tagLabel = (theme) => ({
     background: 'rgba(76, 217, 100, .08)',
   },
   // 레드
-  '& .label__status--101, .label__status--199, .label__status--1, .label__status--222, .label__status--299': {
-    color: '#FF3B30',
-    background: 'rgba(255, 59, 48, .08)',
-  },
+  '& .label__status--101, .label__status--199, .label__status--1, .label__status--222, .label__status--299':
+    {
+      color: '#FF3B30',
+      background: 'rgba(255, 59, 48, .08)',
+    },
   // 퍼플
   '& .label__status-3': {
     color: '#6765ff',
     background: 'rgba(103, 101, 255, .08)',
   },
   // 블루
-  '& .label__status-111, .label__status-1, .label__status-200, .label__status-201, .label__status-202': {
-    color: '#007AFF',
-    background: 'rgba(0, 122, 255, .08)',
-  },
+  '& .label__status-111, .label__status-1, .label__status-200, .label__status-201, .label__status-202':
+    {
+      color: '#007AFF',
+      background: 'rgba(0, 122, 255, .08)',
+    },
   // 그레이
   '& .label__status-222': {
     color: '#8e8e93',

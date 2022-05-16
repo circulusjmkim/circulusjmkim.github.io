@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Container, Grid, makeStyles, useMediaQuery } from '@material-ui/core';
+import { Container, Grid, useMediaQuery } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +13,6 @@ import Content from '../components/Content';
 import { setItem, setTab, setHome } from '../features/page';
 import BgLogo from '../assets/bg_logo.png';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     position: 'relative',
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiContainer-root': {
       paddingLeft: 0,
       paddingRight: 0,
-    }
+    },
   },
 
   bg: {
@@ -81,15 +81,15 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         height: '3.2rem',
         width: 'auto',
-      }
+      },
     },
     '& .MuiTypography-h3': {
       margin: theme.spacing(1),
       '@media (max-width: 600px)': {
         marginBottom: theme.spacing(1),
         fontSize: '20px',
-      }
-    }
+      },
+    },
   },
   menutab: {
     background: `${theme.palette.grey['900']}`,
@@ -100,16 +100,16 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiTab-wrapper': {
       '@media (max-width: 600px)': {
         lineHeight: 1.25,
-      }
-    }
+      },
+    },
   },
   subheader: {
-    margin: `${theme.spacing(2)}px ${theme.spacing(4)}px`,
+    margin: `${theme.spacing(2)} ${theme.spacing(4)} !important`,
     color: theme.palette.text.secondary,
     '@media (max-width: 600px)': {
-      margin: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+      margin: `${theme.spacing(1)} ${theme.spacing(2)}`,
       fontSize: '16px',
-    }
+    },
   },
   list: {
     '& .MuiGrid-item': {
@@ -124,23 +124,23 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiListItem-button': {
       '&:hover': {
-        backgroundColor: 'rgba(8, 131, 189, .3)'
-      }
+        backgroundColor: 'rgba(8, 131, 189, .3)',
+      },
     },
     '& .MuiListItem-root.Mui-selected': {
       '&:hover': {
-        backgroundColor: 'rgba(8, 131, 189, .5)'
+        backgroundColor: 'rgba(8, 131, 189, .5)',
       },
-      backgroundColor: 'rgba(8, 131, 189, .5)'
-    }
+      backgroundColor: 'rgba(8, 131, 189, .5)',
+    },
   },
   content: {
     padding: theme.spacing(2),
     width: '100%',
     '& .MuiTypography-subtitle2': {
       color: theme.palette.secondary.light,
-    }
-  }
+    },
+  },
 }));
 
 const Main = ({ children }) => {
@@ -153,8 +153,8 @@ const Main = ({ children }) => {
   const smMatches = useMediaQuery('(min-width:600px)');
 
   const handleTabChange = (v) => {
-    dispatch(setTab({tab: v, item: 0}));
-    if(v > -1) {
+    dispatch(setTab({ tab: v, item: 0 }));
+    if (v > -1) {
       history.push(`/${MENUS[v].value}`);
     }
   };
@@ -163,54 +163,67 @@ const Main = ({ children }) => {
     dispatch(setItem(v));
   };
 
-  
   useEffect(() => {
     // SPA 보완을 위한 tab별 menuitem 별 라우팅
     const { p, menu } = qs.parse(search, { ignoreQueryPrefix: true });
-    if(!p && !menu && pathname === '/') {
-      dispatch(setHome(pathname==='/'));
-      return dispatch(setTab({tab: -1, item: -1}));
+    if (!p && !menu && pathname === '/') {
+      dispatch(setHome(pathname === '/'));
+      return dispatch(setTab({ tab: -1, item: -1 }));
     }
     let path = pathname;
-    if(p) {
+    if (p) {
       path += p;
     }
-    if(menu) {
+    if (menu) {
       path += `?menu=${menu}`;
     }
-    dispatch(setHome(path==='/'));
+    dispatch(setHome(path === '/'));
     let tabname = pathname !== '/' && pathname;
-    if(!tabname && p) {
+    if (!tabname && p) {
       tabname = `/${p}`;
     }
-    if(tabname) {
-      const tabItemIndex = MENUS.findIndex(({ value }) => tabname === `/${value}`);
-      const itemIndex = menu ? MENUS[tabItemIndex].list.findIndex((listitem) => listitem.path === menu) : 0;
-      return dispatch(setTab({tab: tabItemIndex, item: itemIndex}));
+    if (tabname) {
+      const tabItemIndex = MENUS.findIndex(
+        ({ value }) => tabname === `/${value}`,
+      );
+      const itemIndex = menu
+        ? MENUS[tabItemIndex].list.findIndex(
+            (listitem) => listitem.path === menu,
+          )
+        : 0;
+      return dispatch(setTab({ tab: tabItemIndex, item: itemIndex }));
     }
     return history.replace(path);
   }, [search]);
 
   return (
     <div className={classes.root}>
-      {home && <div style={{position:'absolute', top: 0, left:0, right:0, bottom:0}}>
-        <div className={home?classes.bg:''} />
-      </div>}
+      {home && (
+        <div
+          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+        >
+          <div className={home ? classes.bg : ''} />
+        </div>
+      )}
       <Container maxWidth="lg">
         <Grid container>
-          <Header {...{title: 'Admin Control'}} style={{zIndex: '1500'}} />
-          <FullWidthTabs {...{list: MENUS, value: tab, classes, onChange: handleTabChange}} />
+          <Header {...{ title: 'Admin Control' }} style={{ zIndex: '1500' }} />
+          <FullWidthTabs
+            {...{ list: MENUS, value: tab, classes, onChange: handleTabChange }}
+          />
           {home && <>{children}</>}
-          {
-            tab > -1 && (
-              <>
-                {(!home || smMatches) && <SubHeader {...{classes, desc: MENUS[tab].desc}} />}
-                {!home && <Content {...{tab, item, classes, handleListItemClick}}>
+          {tab > -1 && (
+            <>
+              {(!home || smMatches) && (
+                <SubHeader {...{ classes, desc: MENUS[tab].desc }} />
+              )}
+              {!home && (
+                <Content {...{ tab, item, classes, handleListItemClick }}>
                   {children}
-                </Content>}
-              </>
-            )
-          }
+                </Content>
+              )}
+            </>
+          )}
         </Grid>
       </Container>
     </div>

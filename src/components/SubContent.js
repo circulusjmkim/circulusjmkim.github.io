@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 
 const SubContent = ({ desc, classes }) => (
   <Grid item xs={12} sm={8} md={9} lg={10}>

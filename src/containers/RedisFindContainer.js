@@ -1,8 +1,14 @@
-import React, {useState} from 'react';
-import { Grid, TextField, 
-  // Button, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, Chip, 
-  InputAdornment, IconButton, FormGroup, Typography } from '@material-ui/core';
-import ClearIcon from '@material-ui/icons/Clear';
+import React, { useState } from 'react';
+import {
+  Grid,
+  TextField,
+  // Button, Card, CardContent, Typography, CardActions, Table, TableBody, TableRow, TableCell, Chip,
+  InputAdornment,
+  IconButton,
+  FormGroup,
+  Typography,
+} from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 import { useStyles } from '../styles/robotStyle';
 import EnvSelect from '../components/EnvSelect';
 import AntSwitch from '../components/AntSwitch';
@@ -20,14 +26,15 @@ const RedisFindContainer = () => {
     console.log(e);
     // dispatch(textChange(e));
   };
-  
+
   const handleClickClear = (e) => {
     console.log(e);
     // dispatch(clearClick(e));
   };
 
   return (
-    <Grid container
+    <Grid
+      container
       direction="row"
       justifyContent="flex-start"
       alignItems="stretch"
@@ -37,7 +44,7 @@ const RedisFindContainer = () => {
       <Grid item xs={6} md={2} className={classes.marginVertical}>
         <EnvSelect />
       </Grid>
-      <Grid container item xs={12} md={10} style={{display: 'inline-flex'}}>
+      <Grid container item xs={12} md={10} style={{ display: 'inline-flex' }}>
         <Grid item className={classes.marginVertical}>
           <FormGroup>
             <Typography component="div">
@@ -54,23 +61,29 @@ const RedisFindContainer = () => {
         <Grid item>
           <TextField
             id="standard-basic"
-            className={classes.textField} 
-            label={bUser?'사용자의 아이디를 입력하세요.':'로봇의 ObjectId 또는 Serial No.를 입력하세요.'}
-            onChange={handleTextChange} 
+            className={classes.textField}
+            label={
+              bUser
+                ? '사용자의 아이디를 입력하세요.'
+                : '로봇의 ObjectId 또는 Serial No.를 입력하세요.'
+            }
+            onChange={handleTextChange}
             // value={words || ''}
             // error={dataError}
             InputLabelProps={{
               shrink: true,
             }}
             InputProps={{
-              endAdornment: (<InputAdornment position="end">
-              <IconButton
-                aria-label="robot id input value clear"
-                onClick={handleClickClear}
-              >
-                <ClearIcon />
-              </IconButton>
-            </InputAdornment>)
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="robot id input value clear"
+                    onClick={handleClickClear}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
           />
         </Grid>

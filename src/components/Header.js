@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { useHistory } from 'react-router';
 
@@ -21,28 +22,34 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         height: '3.2rem',
         width: 'auto',
-      }
+      },
     },
     '& .MuiTypography-h3': {
       margin: theme.spacing(1),
       '@media (max-width: 600px)': {
         marginBottom: theme.spacing(1),
         fontSize: '20px',
-      }
-    }
+      },
+    },
   },
 }));
 
-const Header = ({title}) => {
+const Header = ({ title }) => {
   const classes = useStyles();
   const history = useHistory();
   return (
-  <Grid item xs={12}>
-    <div className={classes.logo} role="button" onClick={() => history.push('/')} aria-hidden="true">
-      <img alt="Circulus" src="/logo_circulus.png" />
-      <Typography variant="h3">{title}</Typography>
-    </div>
-  </Grid>
-)};
+    <Grid item xs={12}>
+      <div
+        className={classes.logo}
+        role="button"
+        onClick={() => history.push('/')}
+        aria-hidden="true"
+      >
+        <img alt="Circulus" src="/logo_circulus.png" />
+        <Typography variant="h3">{title}</Typography>
+      </div>
+    </Grid>
+  );
+};
 
 export default Header;
