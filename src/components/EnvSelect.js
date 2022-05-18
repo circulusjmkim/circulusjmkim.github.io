@@ -40,7 +40,7 @@ const EnvSelect = ({ label, onChange }) => {
       >
         <MenuItem value="ops">OPS</MenuItem>
         <MenuItem value="stg">STG</MenuItem>
-        <MenuItem value="dev">DEV</MenuItem>
+        {/* <MenuItem value="dev">DEV</MenuItem> */}
       </Select>
     </FormControl>
   );

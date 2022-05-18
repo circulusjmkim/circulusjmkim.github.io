@@ -6,13 +6,16 @@ const SITE_URL =
     ? 'http://localhost:3001'
     : 'https://circulusjmkim.github.io';
 const API_URL = (env) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return 'http://0.0.0.0:58791/v1/';
+  console.log(env);
+  // if (process.env.NODE_ENV !== 'production') {
+  //   return 'http://0.0.0.0:58791/v1/';
+  // }
+  switch (env) {
+    case 'stg':
+      return 'http://192.168.2.114:58791/v1/';
+    default:
+      return 'http://192.168.3.214:59791/v1/';
   }
-  if (env) {
-    return `https://${env}-zapi.circul.us/v1/`;
-  }
-  return `https://stg-zapi.circul.us/v1/`;
 };
 const publishDate = '2107161406';
 
