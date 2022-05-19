@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
@@ -16,18 +16,13 @@ const useStyles = makeStyles((theme) => ({
 
 const EnvSelect = ({ label, onChange }) => {
   const classes = useStyles();
-  const [env, setEnv] = useState(localStorage.getItem('env') || 'ops');
 
   const handleChange = (e, { props: { value } }) => {
+    localStorage.setItem('env', value);
     if (onChange) {
       onChange(e);
     }
-    setEnv(value);
   };
-
-  useEffect(() => {
-    localStorage.setItem('env', env);
-  }, [env]);
 
   return (
     <FormControl className={classes.formControl}>
@@ -35,7 +30,7 @@ const EnvSelect = ({ label, onChange }) => {
       <Select
         labelId="env-select-label"
         id="env-select"
-        value={env}
+        value={localStorage.getItem('env') || 'ops'}
         onChange={handleChange}
       >
         <MenuItem value="ops">OPS</MenuItem>
