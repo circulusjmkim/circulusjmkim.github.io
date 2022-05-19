@@ -3,8 +3,15 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useMount, useUpdateEffect } from 'react-use';
-import { Grid, Typography } from '@mui/material';
+import { useLifecycles, useUpdateEffect } from 'react-use';
+import {
+  Backdrop,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import {
@@ -49,53 +56,39 @@ const headers = [
     headerName: '릴리즈 노트',
     align: 'center',
     headerAlign: 'center',
-    // width: 100,
-    // editable: true,
   },
   {
     field: 'fixed',
     headerName: '상단고정',
     align: 'center',
     headerAlign: 'center',
-    // width: 100,
-    // editable: true,
   },
   {
     field: 'createdAt',
     headerName: '작성일',
+    headerAlign: 'center',
     width: 180,
-    // type: 'number',
-    // editable: true,
   },
   {
     field: 'updatedAt',
     headerName: '수정일',
+    headerAlign: 'center',
     width: 180,
-    // description: 'This column has a value getter and is not sortable.',
-    // sortable: false,
-    // valueGetter: (params) =>
-    //   `${params.getValue(params.id, 'firstName') || ''} ${
-    //     params.getValue(params.id, 'lastName') || ''
-    //   }`,
   },
   {
-    field: 'editBtn',
-    headerName: '수정',
-    width: 110,
-    headerAlign: 'center',
+    field: 'btns',
+    headerName: '수정 및 삭제',
     align: 'center',
-    renderCell: ({ id, value: handleEdit }) => (
-      <EditIcon onClick={handleEdit(id)} />
-    ),
-  },
-  {
-    field: 'deleteBtn',
-    headerName: '삭제',
-    width: 110,
     headerAlign: 'center',
-    align: 'center',
-    renderCell: ({ id, value: handleDelete }) => (
-      <DeleteForeverIcon onClick={handleDelete(id)} />
+    renderCell: ({ id, value: { handleEdit, handleDelete } }) => (
+      <Stack direction="row" gap={0.5}>
+        <IconButton aria-label="수정" onClick={handleEdit(id)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="삭제" onClick={handleDelete(id)}>
+          <DeleteForeverIcon />
+        </IconButton>
+      </Stack>
     ),
   },
 ];
@@ -136,14 +129,23 @@ const useStyles = makeStyles((theme) => ({
 const NoticeUpdateContainer = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { error, list, skip, limit, editMode, editItem, saved } = useSelector(
-    (state) => state.notice,
-  );
+  const {
+    error,
+    pending,
+    list,
+    skip,
+    limit,
+    editMode,
+    editItem,
+    saved,
+    deleted,
+  } = useSelector((state) => state.notice);
   const {
     content: originContent,
     title: originTitle,
     fixed: originFixed,
     order: originOrder,
+    _id: itemId,
   } = editItem || { content: '', title: '', fixed: false, order: false };
   const [content, setContent] = useState(originContent || '');
   const [title, setTitle] = useState(originTitle || '');
@@ -158,21 +160,19 @@ const NoticeUpdateContainer = () => {
   });
 
   const handleEdit = (id) => () => {
-    dispatch(setEditMode({ mode: !editMode, item: editMode ? null : id }));
+    dispatch(setEditMode({ mode: true, item: id }));
   };
 
   const handleDeleteDialog = (id) => () => {
     setOpen({ open: true, selectId: id });
   };
 
-  const handleDelete =
-    (value, strict = false) =>
-    () => {
-      dispatch(deleteItem({ id: value, strict }));
-    };
+  const handleDelete = (value, strict = false) => {
+    dispatch(deleteItem({ id: value, strict }));
+  };
 
   const handleDialogClose = () => {
-    setOpen(false);
+    setOpen({ open: false, selectId: null });
   };
 
   const handleClick = () => {
@@ -190,6 +190,12 @@ const NoticeUpdateContainer = () => {
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
+  const handleClickPrev = () => {
+    setContent(originContent || '');
+    setTitle(originTitle || '');
+    setChecked({ fixed: originFixed || false, order: originOrder || false });
+    dispatch(setEditMode({ mode: false }));
+  };
   const handleClickClear = () => {
     setTitle('');
   };
@@ -203,20 +209,20 @@ const NoticeUpdateContainer = () => {
     dispatch(setEditMode({ mode: true, item: editItem._id }));
   };
   const handleListInit = () => {
-    setContent(originContent || '');
-    setTitle(originTitle || '');
-    setChecked({ fixed: originFixed || false, order: originOrder || false });
-    dispatch(setEditMode({ mode: false }));
+    handleClickPrev();
     dispatch(
       getList({ skip, limit, handleEdit, handleDelete: handleDeleteDialog }),
     );
   };
 
-  useMount(() => {
-    dispatch(
-      getList({ skip, limit, handleEdit, handleDelete: handleDeleteDialog }),
-    );
-  });
+  useLifecycles(
+    () => {
+      dispatch(
+        getList({ skip, limit, handleEdit, handleDelete: handleDeleteDialog }),
+      );
+    },
+    () => dispatch(setEditMode({ mode: false })),
+  );
 
   useUpdateEffect(() => {
     setContent(originContent);
@@ -225,10 +231,13 @@ const NoticeUpdateContainer = () => {
   }, [editItem]);
 
   useUpdateEffect(() => {
-    if (saved) {
+    if (deleted !== null) {
+      setOpen({ open: false, selectId: null });
+    }
+    if (saved || deleted) {
       setTimeout(handleListInit, 1000);
     }
-  }, [saved]);
+  }, [saved, deleted]);
 
   return (
     <Grid
@@ -239,6 +248,12 @@ const NoticeUpdateContainer = () => {
       gap={1}
       className={classes.root}
     >
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={pending}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {!editMode && (
         <NoticeList
           {...{
@@ -251,10 +266,11 @@ const NoticeUpdateContainer = () => {
           }}
         />
       )}
-      {editMode && (
+      {editMode && !saved && (
         <NoticeForm
           {...{
             label: '수정',
+            itemId,
             fixed,
             order,
             title,
@@ -266,6 +282,8 @@ const NoticeUpdateContainer = () => {
             handleCheckChange,
             handleTitleChange,
             handleClickClear,
+            handleDeleteDialog,
+            handleClickPrev,
           }}
         />
       )}

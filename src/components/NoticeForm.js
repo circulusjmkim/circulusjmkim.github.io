@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ClearIcon from '@mui/icons-material/Clear';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   Button,
   Grid,
@@ -10,6 +11,7 @@ import {
   FormControlLabel,
   Checkbox,
   Typography,
+  Stack,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import MDEditor from '@uiw/react-md-editor';
@@ -36,6 +38,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NoticeForm = ({
+  itemId,
   fixed,
   order,
   title,
@@ -47,21 +50,33 @@ const NoticeForm = ({
   setContent,
   handleCheckChange,
   handleTitleChange,
+  handleClickPrev,
   handleClickClear,
+  handleDeleteDialog,
 }) => {
   const classes = useStyles();
 
   return (
     <>
-      <Grid container item xs={12} gap={1}>
-        <Grid item xs={3}>
+      <Grid container item xs={12} spacing={1}>
+        <Grid item xs={12}>
+          <Button
+            color="primary"
+            startIcon={<ArrowBackIosNewIcon />}
+            onClick={handleClickPrev}
+            size="small"
+          >
+            목록보기
+          </Button>
+        </Grid>
+        <Grid item xs={2}>
           <EnvSelect />
         </Grid>
-        <Grid item xs={9} style={{ paddingLeft: '1rem' }}>
+        <Grid item xs={10} sx={{ pl: 1, mb: 1 }}>
           <FormControlLabel
             control={
               <Checkbox
-                checked={fixed}
+                checked={fixed || false}
                 onChange={handleCheckChange('fixed')}
                 name="fixed"
                 color="primary"
@@ -72,7 +87,7 @@ const NoticeForm = ({
           <FormControlLabel
             control={
               <Checkbox
-                checked={order}
+                checked={order || false}
                 onChange={handleCheckChange('order')}
                 name="order"
                 color="primary"
@@ -114,14 +129,56 @@ const NoticeForm = ({
           {error}
         </Typography>
       )}
-      <Grid item className={classes.buttonGroup} xs={12}>
-        <Button variant="contained" color="primary" onClick={handleInit}>
-          초기화
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleClick}>
-          {label}
-        </Button>
-      </Grid>
+      {itemId && (
+        <Grid item className={classes.buttonGroup} xs={12}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteDialog && handleDeleteDialog(itemId)}
+            size="small"
+          >
+            삭제
+          </Button>
+          <Stack direction="row" gap={1}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleInit}
+              size="small"
+            >
+              초기화
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClick}
+              size="small"
+            >
+              {label}
+            </Button>
+          </Stack>
+        </Grid>
+      )}
+      {!itemId && (
+        <Grid item className={classes.buttonGroup} xs={12}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleInit}
+            size="small"
+          >
+            초기화
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleClick}
+            size="small"
+          >
+            {label}
+          </Button>
+        </Grid>
+      )}
     </>
   );
 };

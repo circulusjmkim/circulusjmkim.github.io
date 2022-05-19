@@ -1,17 +1,33 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import moment from "moment";
-import { addNotice, deleteNotice, getNoticeItem, getNoticeList, updateNotice } from "../api/amapi";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import moment from 'moment';
+import {
+  addNotice,
+  deleteNotice,
+  getNoticeItem,
+  getNoticeList,
+  updateNotice,
+} from '../api/amapi';
 
 export const add = createAsyncThunk(
   'notice/ADD',
-  async ({ title, content, emoji, order, fixed, date }, { rejectWithValue }) => {
+  async (
+    { title, content, emoji, order, fixed, date },
+    { rejectWithValue },
+  ) => {
     try {
-      const { result, error } = await addNotice({ title, content, emoji, order, fixed, date });
-      if(result) {
+      const { result, error } = await addNotice({
+        title,
+        content,
+        emoji,
+        order,
+        fixed,
+        date,
+      });
+      if (result) {
         return result;
       }
-      if(error && 'code' in error && 'desc' in error) {
-        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
+      if (error && 'code' in error && 'desc' in error) {
+        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`);
       }
       return rejectWithValue(`😥 공지사항 등록 실패`);
     } catch (error) {
@@ -22,14 +38,25 @@ export const add = createAsyncThunk(
 
 export const updateItem = createAsyncThunk(
   'notice/UPDATE',
-  async ({ id, title, content, emoji, order, fixed, date }, { rejectWithValue }) => {
+  async (
+    { id, title, content, emoji, order, fixed, date },
+    { rejectWithValue },
+  ) => {
     try {
-      const { result, error } = await updateNotice({ id, title, content, emoji, order, fixed, date });
-      if(result) {
+      const { result, error } = await updateNotice({
+        id,
+        title,
+        content,
+        emoji,
+        order,
+        fixed,
+        date,
+      });
+      if (result) {
         return result;
       }
-      if(error && 'code' in error && 'desc' in error) {
-        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
+      if (error && 'code' in error && 'desc' in error) {
+        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`);
       }
       return rejectWithValue(`😥 공지사항 수정 실패`);
     } catch (error) {
@@ -43,11 +70,11 @@ export const deleteItem = createAsyncThunk(
   async ({ id, strict }, { rejectWithValue }) => {
     try {
       const { result, error } = await deleteNotice({ id, strict });
-      if(result) {
+      if (result) {
         return result;
       }
-      if(error && 'code' in error && 'desc' in error) {
-        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
+      if (error && 'code' in error && 'desc' in error) {
+        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`);
       }
       return rejectWithValue(`😥 공지사항 삭제 실패`);
     } catch (error) {
@@ -61,14 +88,16 @@ export const getItem = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const { result, data } = await getNoticeItem(id);
-      if(result) {
+      if (result) {
         return data;
       }
       return rejectWithValue(`😥 공지사항(${id}) 로드 실패`);
     } catch (error) {
-      return rejectWithValue(`${JSON.stringify(error)}:😥 공지사항(${id}) 로드 실패`);
+      return rejectWithValue(
+        `${JSON.stringify(error)}:😥 공지사항(${id}) 로드 실패`,
+      );
     }
-  }
+  },
 );
 
 export const getList = createAsyncThunk(
@@ -76,21 +105,32 @@ export const getList = createAsyncThunk(
   async ({ skip, limit, handleEdit, handleDelete }, { rejectWithValue }) => {
     try {
       const { result, data, error } = await getNoticeList({ skip, limit });
-      if(result) {
-        const list = data.map(({ title: t, order, firstTime, lastTime, fixed:f, ...rest }) => {
-          const title = { title: t, handleEdit };
-          const createdAt = moment(firstTime).format('YYYY.MM.DD hh:mm:ss');
-          const updatedAt = moment(lastTime).format('YYYY.MM.DD hh:mm:ss');
-          const fixed = f ? `🆙` : '';
-          const note = order === 1 ? `🔒` : '';
-          const editBtn = handleEdit;
-          const deleteBtn = handleDelete;
-          return { ...rest, title, note, fixed, createdAt, updatedAt, editBtn, deleteBtn };
-        })
-        return {skip, limit, list};
+      if (result) {
+        const list = data.map(
+          ({ title: t, order, firstTime, lastTime, fixed: f, ...rest }) => {
+            const title = { title: t, handleEdit };
+            const createdAt = moment(firstTime).format('YYYY.MM.DD HH:mm:ss');
+            const updatedAt = moment(lastTime).format('YYYY.MM.DD HH:mm:ss');
+            const fixed = f ? `🆙` : '';
+            const note = order === 1 ? `🔒` : '';
+            const btns = { handleEdit, handleDelete };
+            // const editBtn = handleEdit;
+            // const deleteBtn = handleDelete;
+            return {
+              ...rest,
+              title,
+              note,
+              fixed,
+              createdAt,
+              updatedAt,
+              btns,
+            };
+          },
+        );
+        return { skip, limit, list };
       }
-      if(error && 'code' in error && 'desc' in error) {
-        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`)
+      if (error && 'code' in error && 'desc' in error) {
+        return rejectWithValue(`🙅🏻‍♀️ ${error.desc} 🙅🏻‍♂️`);
       }
       return rejectWithValue(`😥 공지사항 로드 실패`);
     } catch (error) {
@@ -98,7 +138,6 @@ export const getList = createAsyncThunk(
     }
   },
 );
-
 
 const initialState = {
   error: null,
@@ -109,17 +148,23 @@ const initialState = {
   editMode: false,
   editItem: null,
   deleted: false,
-}
+  pending: false,
+};
 
 const noticeSlice = createSlice({
   name: 'notice',
   initialState,
   reducers: {
-    init: () => ({...initialState }),
-    getUpdate: (state, action) => ({ ...state, editMode: action.payload.mode, editItem: action.payload.item }),
+    init: () => ({ ...initialState }),
+    getUpdate: (state, action) => ({
+      ...state,
+      saved: null,
+      editMode: action.payload.mode,
+      editItem: action.payload.item,
+    }),
   },
   extraReducers: {
-    [add.pending.type]: state => ({ ...state, error: null, saved: null}),
+    [add.pending.type]: (state) => ({ ...state, error: null, saved: null }),
     [add.fulfilled.type]: (state, action) => ({
       ...state,
       error: null,
@@ -130,7 +175,11 @@ const noticeSlice = createSlice({
       saved: false,
       error: action.payload,
     }),
-    [updateItem.pending.type]: state => ({ ...state, error: null, saved: null}),
+    [updateItem.pending.type]: (state) => ({
+      ...state,
+      error: null,
+      saved: null,
+    }),
     [updateItem.fulfilled.type]: (state, action) => ({
       ...state,
       error: null,
@@ -141,21 +190,33 @@ const noticeSlice = createSlice({
       saved: false,
       error: action.payload,
     }),
-    [deleteItem.pending.type]: state => ({ ...state, error: null, deleted: null}),
+    [deleteItem.pending.type]: (state) => ({
+      ...state,
+      error: null,
+      deleted: null,
+      pending: true,
+    }),
     [deleteItem.fulfilled.type]: (state, action) => ({
       ...state,
       error: null,
       deleted: action.payload,
+      pending: false,
     }),
     [deleteItem.rejected.type]: (state, action) => ({
       ...state,
       deleted: false,
       error: action.payload,
+      pending: false,
     }),
-    [getList.pending.type]: state => ({ ...state, error: null }),
+    [getList.pending.type]: (state) => ({
+      ...state,
+      error: null,
+      pending: true,
+    }),
     [getList.fulfilled.type]: (state, action) => ({
       ...state,
       error: null,
+      pending: false,
       skip: action.payload.skip,
       limit: action.payload.limit,
       list: action.payload.list,
@@ -163,8 +224,9 @@ const noticeSlice = createSlice({
     [getList.rejected.type]: (state, action) => ({
       ...state,
       error: action.payload,
+      pending: false,
     }),
-    [getItem.pending.type]: state => ({ ...state, error: null }),
+    [getItem.pending.type]: (state) => ({ ...state, error: null }),
     [getItem.fulfilled.type]: (state, action) => ({
       ...state,
       error: null,
@@ -175,20 +237,22 @@ const noticeSlice = createSlice({
       ...state,
       error: action.payload,
     }),
-  }
+  },
 });
 
 const { reducer: noticeReducer, actions } = noticeSlice;
 const { getUpdate } = actions;
 export const { init } = actions;
 
-export const setEditMode = ({ mode, item: selectId }) => (dispatch) => {
-  // const { notice } = getState();
-  if(mode) {
-    dispatch(getItem(selectId));
-  } else {
-    dispatch(getUpdate({ mode, item: null}));
-  }
-};
+export const setEditMode =
+  ({ mode, item: selectId }) =>
+  (dispatch) => {
+    // const { notice } = getState();
+    if (mode) {
+      dispatch(getItem(selectId));
+    } else {
+      dispatch(getUpdate({ mode, item: null }));
+    }
+  };
 
 export default noticeReducer;

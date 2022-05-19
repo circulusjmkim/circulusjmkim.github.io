@@ -8,13 +8,11 @@ const useStyles = makeStyles({
   },
 });
 
-const NoticeDeleteDialog = (props) => {
+const NoticeDeleteDialog = ({ onDelete, onClose, value, open }) => {
   const classes = useStyles();
-  const { onDelete, onClose, value, open } = props;
 
   const handleDelete = (i, j) => () => {
     onDelete(i, j);
-    onClose();
   };
 
   const handleClose = () => {

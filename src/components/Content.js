@@ -31,7 +31,7 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
       justifyContent="center"
       alignItems="stretch"
     >
-      <Grid item xs={12} sm={4} md={3} lg={2}>
+      <Grid item xs={12} sm={3} md={3} lg={2}>
         {list.map(({ value, label }, i) => (
           <SubList
             {...{
@@ -58,7 +58,7 @@ const Content = ({ tab, item, classes, handleListItemClick, children }) => {
         )}
         {mobileMatches && <Divider />}
       </Grid>
-      <Grid item container xs={12} sm={8} md={9} lg={10}>
+      <Grid item container xs={12} sm={9} md={9} lg={10}>
         <div className={classes.content}>
           <ContentDescription {...list[item]} />
           <div style={{ width: '100%' }}>{children}</div>
