@@ -255,7 +255,6 @@ export const textChange = (e) => (dispatch, getState) => {
   const {
     target: { value: v },
   } = e;
-  console.log(menu, v);
   const value = v.replace(/[^a-zA-Z\d]/g, '');
   if (menu !== USER_MENU_SIGNUP) {
     if (menu === USER_MENU_VERIFY) {

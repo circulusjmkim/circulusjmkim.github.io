@@ -289,7 +289,6 @@ export const textChange = (e) => (dispatch, getState) => {
     target: { name, value: v },
   } = e;
   const value = v.replace(/[^a-zA-Z_\d]/g, '');
-  console.log(e.target.name, e.target.value);
   if (menu === ROBOT_MENU_DISCONNECT || menu === ROBOT_MENU_CLEAR) {
     dispatch(setParams({ words: value }));
   }
@@ -305,7 +304,6 @@ export const addSerialChange = (e, i) => (dispatch, getState) => {
   const {
     target: { value: v },
   } = e;
-  console.log(v);
   const value = v.replace(/[^a-zA-Z\d]/g, '');
   const { robots } = params;
   const newRobots = robots ? [...robots] : [value];

@@ -39,7 +39,6 @@ export const findList = createAsyncThunk(
   async ({ words, page: pp }, { getState, rejectWithValue }) => {
     try {
       const { chipData, page: p, radio, limit: l } = getState().find;
-      console.log(pp || p);
       const params = getQueries(chipData, radio, pp || p, l, words);
       const { limit, skip } = params;
       const { result, list } = await findUserList(params);
