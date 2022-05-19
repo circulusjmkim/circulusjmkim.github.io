@@ -268,7 +268,7 @@ const FindUserContainer = () => {
         </Grid>
       ))}
       <Grid item xs={6} md={2} className={classes.marginVertical}>
-        <EnvSelect />
+        <EnvSelect onChange={handleFindClick} />
       </Grid>
       <Grid container item xs={12} md={10} style={{ display: 'inline-flex' }}>
         <FormControl component="fieldset" className={classes.form}>
