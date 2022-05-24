@@ -75,6 +75,7 @@ const NoticeAddContainer = () => {
         <NoticeForm
           {...{
             label: '등록',
+            editMode: false,
             fixed,
             order,
             title,

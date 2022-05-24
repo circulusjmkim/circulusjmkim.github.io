@@ -23,11 +23,12 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  darken,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from '@mui/material/Pagination';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import { makeStyles } from '@mui/styles';
+import { makeStyles, styled } from '@mui/styles';
 import EnvSelect from '../components/EnvSelect';
 import {
   setChipData,
@@ -131,6 +132,49 @@ const useStyles = makeStyles((theme) => ({
   pagination: {
     '& .MuiPagination-ul': {
       justifyContent: 'center',
+    },
+  },
+}));
+
+const CustomTableContainer = styled(TableContainer)(({ theme }) => ({
+  overflowY: 'scroll',
+  overflowX: 'auto',
+  width: '100%',
+  cursor: 'pointer',
+  '&::-webkit-scrollbar': {
+    width: '6px',
+    height: '6px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: 'transparent',
+    borderRadius: '3px',
+    margin: '3px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: theme.palette.divider,
+    borderRadius: '3px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: `${darken(theme.palette.divider, 0.16)}`,
+    borderRadius: '3px',
+  },
+  '& .MuiDataGrid-virtualScroller': {
+    '&::-webkit-scrollbar': {
+      width: '6px',
+      height: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+      borderRadius: '3px',
+      margin: '3px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: theme.palette.divider,
+      borderRadius: '3px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: `${darken(theme.palette.divider, 0.16)}`,
+      borderRadius: '3px',
     },
   },
 }));
@@ -344,7 +388,7 @@ const FindUserContainer = () => {
         <Grid item xs={12} />
         {userList && (
           <Grid item xs={12}>
-            <TableContainer component={Paper} className={classes.table}>
+            <CustomTableContainer component={Paper} className={classes.table}>
               <Table
                 size="small"
                 className={classes.table}
@@ -413,7 +457,7 @@ const FindUserContainer = () => {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </CustomTableContainer>
           </Grid>
         )}
         {userList && userList.length > 0 && (

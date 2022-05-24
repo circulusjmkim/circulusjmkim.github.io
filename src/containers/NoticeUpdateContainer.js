@@ -270,6 +270,7 @@ const NoticeUpdateContainer = () => {
         <NoticeForm
           {...{
             label: '수정',
+            editMode,
             itemId,
             fixed,
             order,

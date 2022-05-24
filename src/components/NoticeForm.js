@@ -39,6 +39,7 @@ const useStyles = makeStyles(() => ({
 
 const NoticeForm = ({
   itemId,
+  editMode,
   fixed,
   order,
   title,
@@ -59,16 +60,18 @@ const NoticeForm = ({
   return (
     <>
       <Grid container item xs={12} spacing={1}>
-        <Grid item xs={12}>
-          <Button
-            color="primary"
-            startIcon={<ArrowBackIosNewIcon />}
-            onClick={handleClickPrev}
-            size="small"
-          >
-            목록보기
-          </Button>
-        </Grid>
+        {editMode && (
+          <Grid item xs={12}>
+            <Button
+              color="primary"
+              startIcon={<ArrowBackIosNewIcon />}
+              onClick={handleClickPrev}
+              size="small"
+            >
+              목록보기
+            </Button>
+          </Grid>
+        )}
         <Grid item xs={2}>
           <EnvSelect />
         </Grid>

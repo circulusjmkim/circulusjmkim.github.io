@@ -1,4 +1,4 @@
-import { createTheme, responsiveFontSizes } from '@mui/material';
+import { createTheme, darken, responsiveFontSizes } from '@mui/material';
 import { koKR } from '@mui/material/locale';
 
 const commonPalette = {
@@ -163,20 +163,77 @@ const components = {
 
 const themeType = (type) => {
   let theme = null;
-  const themeObj = {
-    typography,
-    components,
-  };
   if (type) {
     theme = createTheme(
       {
         palette: { ...dark },
-        ...themeObj,
+        typography,
+        components: {
+          ...components,
+          MuiCssBaseline: {
+            styleOverrides: {
+              body: {
+                '&::-webkit-scrollbar': {
+                  width: '6px',
+                  height: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: 'transparent',
+                  borderRadius: '3px',
+                  margin: '3px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                  borderRadius: '3px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: `${darken(
+                    'rgba(255, 255, 255, 0.12)',
+                    0.16,
+                  )}`,
+                  borderRadius: '3px',
+                },
+              },
+            },
+          },
+        },
       },
       koKR,
     );
   } else {
-    theme = createTheme({ palette: { ...light }, ...themeObj }, koKR);
+    theme = createTheme(
+      {
+        palette: { ...light },
+        typography,
+        components: {
+          ...components,
+          MuiCssBaseline: {
+            styleOverrides: {
+              body: {
+                '&::-webkit-scrollbar': {
+                  width: '6px',
+                  height: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: 'transparent',
+                  borderRadius: '3px',
+                  margin: '3px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: 'rgba(0,0,0,.12)',
+                  borderRadius: '3px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  backgroundColor: `${darken('rgba(0,0,0,.12)', 0.16)}`,
+                  borderRadius: '3px',
+                },
+              },
+            },
+          },
+        },
+      },
+      koKR,
+    );
   }
   theme = responsiveFontSizes(theme);
   return theme;
