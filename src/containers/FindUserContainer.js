@@ -20,6 +20,9 @@ import {
   TableBody,
   Divider,
   useMediaQuery,
+  Dialog,
+  DialogActions,
+  DialogTitle,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from '@mui/material/Pagination';
@@ -32,6 +35,7 @@ import {
   setConditions,
   findList,
 } from '../features/find';
+import UserDialogContent from '../components/UserDialogContent';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -141,6 +145,8 @@ const FindUserContainer = () => {
     '사용자의 ObjectId 또는 userId를 입력하세요.',
   );
   const [words, setWords] = useState('');
+  const descriptionElementRef = React.useRef(null);
+  const [[open, selectItem], setOpen] = useState([false, null]);
 
   const handleChipClick = (v) => () => {
     const indexes = v.split('-');
@@ -150,15 +156,15 @@ const FindUserContainer = () => {
       const idx = parseInt(k, 10);
       const i = parseInt(l, 10);
       const list = searchConditions[index].list[idx].list.map(
-        (item, itemIdx) => {
+        (data, itemIdx) => {
           if (i === itemIdx) {
-            return { ...item, selected: index === 0 ? !item.selected : true };
+            return { ...data, selected: index === 0 ? !data.selected : true };
           }
           if (index > 0) {
-            return { ...item, selected: false };
+            return { ...data, selected: false };
           }
 
-          return item;
+          return data;
         },
       );
       dispatch(setConditions({ index, idx, list }));
@@ -183,6 +189,14 @@ const FindUserContainer = () => {
 
   const handlePageChange = (e, v) => {
     dispatch(findList({ words, page: v }));
+  };
+
+  const handleClickOpen = (data) => () => {
+    setOpen([true, data]);
+  };
+
+  const handleClose = () => {
+    setOpen([false, null]);
   };
 
   useEffect(() => {
@@ -220,211 +234,214 @@ const FindUserContainer = () => {
     handleFindClick();
   }, [searchConditions]);
 
+  useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
+
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="stretch"
-      className={classes.root}
-      spacing={2}
-    >
-      {searchConditions.map(({ key, label: l, list }, index) => (
-        <Grid container item xs={12} key={key}>
-          <Grid item xs={2} sm={1} className={classes.searchName}>
-            {l}
-          </Grid>
-          <Grid item xs={10} sm={11} className={classes.conditions}>
-            {list.map(({ item, value, list: items }, idx) => (
-              <div key={`${key}-${value}`} className={classes.itemsWrap}>
-                <div>
-                  {item && (
-                    <Typography variant="subtitle2" sx={{ mr: 1 }}>
-                      {item}
-                    </Typography>
-                  )}
-                  {items.map(
-                    ({ value: itemValue, label: itemLabel, selected }, i) => (
-                      <Chip
-                        key={`${value}-${itemValue}`}
-                        label={itemLabel}
-                        variant={selected ? 'default' : 'outlined'}
-                        color={selected ? 'secondary' : 'default'}
-                        size={small ? 'small' : 'medium'}
-                        onClick={handleChipClick(`${index}-${idx}-${i}`)}
-                        onDelete={
-                          key === 'filter' && selected
-                            ? handleChipClick(`${index}-${idx}-${i}`)
-                            : null
-                        }
-                      />
-                    ),
-                  )}
+    <>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="stretch"
+        className={classes.root}
+        spacing={2}
+      >
+        {searchConditions.map(({ key, label: l, list }, index) => (
+          <Grid container item xs={12} key={key}>
+            <Grid item xs={2} sm={1} className={classes.searchName}>
+              {l}
+            </Grid>
+            <Grid item xs={10} sm={11} className={classes.conditions}>
+              {list.map(({ item, value, list: items }, idx) => (
+                <div key={`${key}-${value}`} className={classes.itemsWrap}>
+                  <div>
+                    {item && (
+                      <Typography variant="subtitle2" sx={{ mr: 1 }}>
+                        {item}
+                      </Typography>
+                    )}
+                    {items.map(
+                      ({ value: itemValue, label: itemLabel, selected }, i) => (
+                        <Chip
+                          key={`${value}-${itemValue}`}
+                          label={itemLabel}
+                          variant={selected ? 'default' : 'outlined'}
+                          color={selected ? 'secondary' : 'default'}
+                          size={small ? 'small' : 'medium'}
+                          onClick={handleChipClick(`${index}-${idx}-${i}`)}
+                          onDelete={
+                            key === 'filter' && selected
+                              ? handleChipClick(`${index}-${idx}-${i}`)
+                              : null
+                          }
+                        />
+                      ),
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </Grid>
+            <Divider style={{ width: '100%' }} />
           </Grid>
-          <Divider style={{ width: '100%' }} />
+        ))}
+        <Grid item xs={6} md={2} className={classes.marginVertical}>
+          <EnvSelect onChange={handleFindClick} />
         </Grid>
-      ))}
-      <Grid item xs={6} md={2} className={classes.marginVertical}>
-        <EnvSelect onChange={handleFindClick} />
-      </Grid>
-      <Grid container item xs={12} md={10} style={{ display: 'inline-flex' }}>
-        <FormControl component="fieldset" className={classes.form}>
+        <Grid container item xs={12} md={10} style={{ display: 'inline-flex' }}>
+          <FormControl component="fieldset" className={classes.form}>
+            <Grid item>
+              <RadioGroup
+                aria-label="type"
+                name="findType"
+                value={radio}
+                onChange={handleRadioChange}
+              >
+                <FormControlLabel
+                  value="user"
+                  control={<Radio />}
+                  label="사용자"
+                />
+                <FormControlLabel
+                  value="robot"
+                  control={<Radio />}
+                  label="로봇"
+                />
+              </RadioGroup>
+            </Grid>
+          </FormControl>
           <Grid item>
-            <RadioGroup
-              aria-label="type"
-              name="findType"
-              value={radio}
-              onChange={handleRadioChange}
-            >
-              <FormControlLabel
-                value="user"
-                control={<Radio />}
-                label="사용자"
-              />
-              <FormControlLabel
-                value="robot"
-                control={<Radio />}
-                label="로봇"
-              />
-            </RadioGroup>
+            <TextField
+              id="standard-basic"
+              sx={{
+                minWidth: '300px',
+                maxWidth: '300px',
+                width: '100%',
+              }}
+              label={label}
+              helperText="일부만 입력하여 검색할 수 있습니다."
+              onChange={handleTextChange}
+              value={words}
+            />
           </Grid>
-        </FormControl>
-        <Grid item>
-          <TextField
-            id="standard-basic"
-            sx={{
-              minWidth: '300px',
-              maxWidth: '300px',
-              width: '100%',
-              // mt: 1,
-              // mb: 2,
-            }}
-            label={label}
-            helperText="일부만 입력하여 검색할 수 있습니다."
-            onChange={handleTextChange}
-            value={words}
-          />
-        </Grid>
-        <Grid item className={classes.marginVertical}>
-          <Button variant="contained" color="primary" onClick={handleFindClick}>
-            검색
-          </Button>
-        </Grid>
-      </Grid>
-      <Divider style={{ width: '100%' }} />
-      <Grid item xs={12} />
-      {userList && (
-        <Grid item xs={12}>
-          <TableContainer component={Paper} className={classes.table}>
-            <Table
-              size="small"
-              className={classes.table}
-              aria-label="user list table"
+          <Grid item className={classes.marginVertical}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleFindClick}
             >
-              <TableHead>
-                <TableRow>
-                  {/* <TableCell>ObjectId(Physical)</TableCell> */}
-                  <TableCell>아이디</TableCell>
-                  <TableCell>이름</TableCell>
-                  <TableCell>로봇</TableCell>
-                  {/* <TableCell>닉네임</TableCell> */}
-                  {/* <TableCell>성별</TableCell> */}
-                  {/* <TableCell>생년월일</TableCell> */}
-                  {/* <TableCell>이메일</TableCell> */}
-                  {/* <TableCell>전화번호</TableCell> */}
-                  <TableCell>인증정보</TableCell>
-                  <TableCell>가입일</TableCell>
-                  <TableCell>수정일</TableCell>
-                  {/* <TableCell>탈퇴여부</TableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {userList.map((row) => (
-                  <TableRow
-                    key={row._id}
-                    style={{ opacity: row.use ? 1 : 0.25 }}
-                  >
-                    {/* <TableCell component="th" scope="row">
-                      {row._id}
-                    </TableCell> */}
-                    <TableCell>{row.userId}</TableCell>
-                    <TableCell
-                      className={classes.tableNoWrap}
-                    >{`${row.lastName} ${row.firstName}`}</TableCell>
-                    <TableCell>
-                      {'pibo' in row ? row.pibo.robotId : '-'}
-                    </TableCell>
-                    {/* <TableCell>{row.nickName}</TableCell> */}
-                    {/* <TableCell>{row.gender}</TableCell> */}
-                    {/* <TableCell className={classes.tableNoWrap}>
-                      {moment(new Date(row.birthDate)).format('YYYY-MM-DD')}
-                    </TableCell> */}
-                    <TableCell className={classes.tableNoWrap}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          columnGap: '6px',
-                        }}
-                      >
-                        {row.verified &&
-                          ('email' in row.verified || 'tel' in row.verified) &&
-                          (row.verified.email || row.verified.tel) && (
-                            <VerifiedUserIcon
-                              fontSize="small"
-                              color="secondary"
-                            />
-                          )}
-                        <div
-                          style={{ display: 'flex', flexDirection: 'column' }}
-                        >
-                          {'email' in row ? <span>{row.email}</span> : ''}
-                          {'tel' in row ? <span>{row.tel}</span> : ''}
-                        </div>
-                      </div>
-                    </TableCell>
-                    {/* <TableCell className={classes.tableNoWrap}>
-                      {row.verified &&
-                        'tel' in row.verified &&
-                        row.verified.tel && (
-                          <VerifiedUserIcon
-                            fontSize="small"
-                            color="secondary"
-                          />
-                        )}
-                      {row.tel || ''}
-                    </TableCell> */}
-                    <TableCell className={classes.tableNoWrap}>
-                      {moment(new Date(row.firstTime)).format(
-                        'YYYY-MM-DD HH:mm',
-                      )}
-                    </TableCell>
-                    <TableCell className={classes.tableNoWrap}>
-                      {moment(new Date(row.lastTime)).format(
-                        'YYYY-MM-DD HH:mm',
-                      )}
-                    </TableCell>
-                    {/* <TableCell>{!row.use && '탈퇴'}</TableCell> */}
+              검색
+            </Button>
+          </Grid>
+        </Grid>
+        <Divider style={{ width: '100%' }} />
+        <Grid item xs={12} />
+        {userList && (
+          <Grid item xs={12}>
+            <TableContainer component={Paper} className={classes.table}>
+              <Table
+                size="small"
+                className={classes.table}
+                aria-label="user list table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>아이디</TableCell>
+                    <TableCell>이름</TableCell>
+                    <TableCell>로봇</TableCell>
+                    <TableCell>인증정보</TableCell>
+                    <TableCell>가입일</TableCell>
+                    <TableCell>수정일</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-      )}
-      {userList && userList.length > 0 && (
-        <Grid item xs={12}>
-          <Pagination
-            count={totalPage}
-            className={classes.pagination}
-            onChange={handlePageChange}
-          />
-        </Grid>
-      )}
-    </Grid>
+                </TableHead>
+                <TableBody>
+                  {userList.map((row) => (
+                    <TableRow
+                      key={row._id}
+                      sx={{ opacity: row.use ? 1 : 0.25, cursor: 'pointer' }}
+                      onClick={handleClickOpen(row)}
+                    >
+                      <TableCell>{row.userId}</TableCell>
+                      <TableCell
+                        className={classes.tableNoWrap}
+                      >{`${row.lastName} ${row.firstName}`}</TableCell>
+                      <TableCell>
+                        {'pibo' in row ? row.pibo.robotId : '-'}
+                      </TableCell>
+                      <TableCell className={classes.tableNoWrap}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '6px',
+                          }}
+                        >
+                          {row.verified &&
+                            ('email' in row.verified ||
+                              'tel' in row.verified) &&
+                            (row.verified.email || row.verified.tel) && (
+                              <VerifiedUserIcon
+                                fontSize="small"
+                                color="secondary"
+                              />
+                            )}
+                          <div
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                          >
+                            {'email' in row ? <span>{row.email}</span> : ''}
+                            {'tel' in row ? <span>{row.tel}</span> : ''}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className={classes.tableNoWrap}>
+                        {moment(new Date(row.firstTime)).format(
+                          'YYYY-MM-DD HH:mm',
+                        )}
+                      </TableCell>
+                      <TableCell className={classes.tableNoWrap}>
+                        {moment(new Date(row.lastTime)).format(
+                          'YYYY-MM-DD HH:mm',
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        )}
+        {userList && userList.length > 0 && (
+          <Grid item xs={12}>
+            <Pagination
+              count={totalPage}
+              className={classes.pagination}
+              onChange={handlePageChange}
+            />
+          </Grid>
+        )}
+      </Grid>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        scroll="paper"
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle id="scroll-dialog-title">{`${
+          selectItem && selectItem.userId
+        } 정보`}</DialogTitle>
+        {selectItem && <UserDialogContent data={selectItem} />}
+        <DialogActions>
+          <Button onClick={handleClose}>닫기</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
