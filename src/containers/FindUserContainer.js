@@ -85,6 +85,12 @@ const useStyles = makeStyles((theme) => ({
   tableNoWrap: {
     whiteSpace: 'nowrap',
   },
+  tableEllipsis: {
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    maxWidth: '160px',
+    overflow: 'hidden',
+  },
   table: {
     margin: theme.spacing(1),
     '& svg.MuiSvgIcon-root': {
@@ -415,8 +421,13 @@ const FindUserContainer = () => {
                       <TableCell
                         className={classes.tableNoWrap}
                       >{`${row.lastName} ${row.firstName}`}</TableCell>
-                      <TableCell>
-                        {'pibo' in row ? row.pibo.robotId : '-'}
+                      <TableCell className={classes.tableEllipsis}>
+                        {row.pibo.length
+                          ? row.pibo.reduce(
+                              (a, c) => (a ? `${a}, ${c.robotId}` : c.robotId),
+                              '',
+                            )
+                          : '-'}
                       </TableCell>
                       <TableCell className={classes.tableNoWrap}>
                         <div
@@ -436,7 +447,10 @@ const FindUserContainer = () => {
                               />
                             )}
                           <div
-                            style={{ display: 'flex', flexDirection: 'column' }}
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                            }}
                           >
                             {'email' in row ? <span>{row.email}</span> : ''}
                             {'tel' in row ? <span>{row.tel}</span> : ''}

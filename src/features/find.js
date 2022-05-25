@@ -70,6 +70,7 @@ const initialState = {
   radio: 'user',
   searchWord: '',
   searchConditions: [...SEARCH_CONDITIONS],
+  pending: false,
 };
 
 const findSlice = createSlice({
@@ -88,13 +89,15 @@ const findSlice = createSlice({
     setSearchType: (state, action) => ({ ...state, radio: action.payload }),
   },
   extraReducers: {
-    [findList.pending.type]: (state) => ({ ...state }),
+    [findList.pending.type]: (state) => ({ ...state, pending: true }),
     [findList.fulfilled.type]: (state, action) => ({
       ...state,
+      pending: false,
       ...action.payload,
     }),
     [findList.rejected.type]: (state, action) => ({
       ...state,
+      pending: false,
       error: action.payload,
     }),
   },

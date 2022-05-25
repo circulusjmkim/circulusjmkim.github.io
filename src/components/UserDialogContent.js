@@ -81,7 +81,10 @@ const UserDialogContent = ({ data }) => {
                 }}
                 readOnly
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    sx={{ height: '100%', alignSelf: 'end' }}
+                  >
                     <IconButton
                       aria-label="content copy"
                       size="small"
@@ -112,7 +115,10 @@ const UserDialogContent = ({ data }) => {
                 }}
                 readOnly
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    sx={{ height: '100%', alignSelf: 'end' }}
+                  >
                     <IconButton
                       aria-label="content copy"
                       size="small"
@@ -137,17 +143,31 @@ const UserDialogContent = ({ data }) => {
                   id: 'piboId',
                   name: 'piboId',
                   type: 'text',
-                  defaultValue: getValue('pibo._id'),
+                  defaultValue: getValue('pibo').reduce(
+                    (a, c) => (a ? `${a}\n${c._id}` : c._id),
+                    '',
+                  ),
                   size: 'small',
                   fullWidth: true,
+                  multiline: true,
                 }}
                 readOnly
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    sx={{ height: '100%', alignSelf: 'end' }}
+                  >
                     <IconButton
                       aria-label="content copy"
                       size="small"
-                      onClick={() => copyToClipboard(data.pibo._id)}
+                      onClick={() =>
+                        copyToClipboard(
+                          getValue('pibo').reduce(
+                            (a, c) => (a ? `${a}\n${c._id}` : c._id),
+                            '',
+                          ),
+                        )
+                      }
                     >
                       <ContentCopyIcon />
                     </IconButton>
@@ -168,17 +188,31 @@ const UserDialogContent = ({ data }) => {
                   id: 'piboSerial',
                   name: 'piboSerial',
                   type: 'text',
-                  defaultValue: getValue('pibo.robotId'),
+                  defaultValue: getValue('pibo').reduce(
+                    (a, c) => (a ? `${a}\n${c.robotId}` : c.robotId),
+                    '',
+                  ),
                   size: 'small',
                   fullWidth: true,
+                  multiline: true,
                 }}
                 readOnly
                 endAdornment={
-                  <InputAdornment position="end">
+                  <InputAdornment
+                    position="end"
+                    sx={{ height: '100%', alignSelf: 'end' }}
+                  >
                     <IconButton
                       aria-label="content copy"
                       size="small"
-                      onClick={() => copyToClipboard(data.pibo.robotId)}
+                      onClick={() =>
+                        copyToClipboard(
+                          getValue('pibo').reduce(
+                            (a, c) => (a ? `${a}\n${c.robotId}` : c.robotId),
+                            '',
+                          ),
+                        )
+                      }
                     >
                       <ContentCopyIcon />
                     </IconButton>
