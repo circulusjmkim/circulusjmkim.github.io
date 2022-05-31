@@ -371,7 +371,7 @@ const FindUserContainer = () => {
               </RadioGroup>
             </Grid>
           </FormControl>
-          <Grid item xs={6}>
+          <Grid item md={6}>
             <TextField
               id="standard-basic"
               sx={{
