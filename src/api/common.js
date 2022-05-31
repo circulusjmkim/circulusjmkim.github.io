@@ -7,7 +7,7 @@ const SITE_URL =
     : 'https://circulusjmkim.github.io';
 const API_URL = (env) => {
   if (process.env.NODE_ENV !== 'production') {
-    return 'http://0.0.0.0:58791/v1/';
+    return 'http://0.0.0.0:57791/v1/';
   }
   switch (env) {
     case 'stg':

@@ -192,7 +192,7 @@ const FindUserContainer = () => {
   const selector = useSelector((state) => state.find);
   const { searchConditions, userList, radio, totalPage } = selector;
   const [label, setLabel] = useState(
-    '사용자의 ObjectId 또는 userId를 입력하세요.',
+    '사용자의 정보(이름, 아이디, 인증정보)를 입력하세요.',
   );
   const [words, setWords] = useState('');
   const descriptionElementRef = React.useRef(null);
@@ -233,7 +233,12 @@ const FindUserContainer = () => {
     const {
       target: { value: v },
     } = e;
-    const value = v.replace(/[^a-zA-Z\d]/g, '');
+    let value;
+    if (radio === 'user') {
+      value = v.replace(/[^a-zA-Z\dㄱ-ㅎㅏ-ㅣ가-힣@\-_.]/g, '');
+    } else {
+      value = v.replace(/[^a-zA-Z\d]/g, '');
+    }
     setWords(value);
   };
 
@@ -251,7 +256,7 @@ const FindUserContainer = () => {
 
   useEffect(() => {
     if (radio === 'user') {
-      setLabel('사용자의 ObjectId 또는 userId를 입력하세요.');
+      setLabel('사용자의 정보(이름, 아이디, 인증정보)를 입력하세요.');
     }
     if (radio === 'robot') {
       setLabel('로봇의 ObjectId 또는 Serial No.를 입력하세요.');
@@ -344,7 +349,7 @@ const FindUserContainer = () => {
         <Grid item xs={6} md={2} className={classes.marginVertical}>
           <EnvSelect onChange={handleFindClick} />
         </Grid>
-        <Grid container item xs={12} md={10} style={{ display: 'inline-flex' }}>
+        <Grid container item xs={12} md={10} sx={{ display: 'inline-flex' }}>
           <FormControl component="fieldset" className={classes.form}>
             <Grid item>
               <RadioGroup
@@ -366,18 +371,17 @@ const FindUserContainer = () => {
               </RadioGroup>
             </Grid>
           </FormControl>
-          <Grid item>
+          <Grid item xs={6}>
             <TextField
               id="standard-basic"
               sx={{
                 minWidth: '300px',
-                maxWidth: '300px',
-                width: '100%',
               }}
               label={label}
               helperText="일부만 입력하여 검색할 수 있습니다."
               onChange={handleTextChange}
               value={words}
+              fullWidth
             />
           </Grid>
           <Grid item className={classes.marginVertical}>
