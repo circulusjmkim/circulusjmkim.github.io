@@ -112,20 +112,21 @@ export const signUp = createAsyncThunk(
   },
 );
 
+const initialData = {
+  userId: '',
+  password: '',
+  lastName: '',
+  firstName: '',
+  email: 'temp@circul.us',
+  tel: '01000000000',
+  birthDate: moment().format('YYYY-MM-DD'),
+  verified: { email: true, tel: true },
+  role: '0000',
+};
 const initialState = {
   loading: false,
   bManager: false,
-  data: {
-    userId: '',
-    password: '',
-    lastName: '',
-    firstName: '',
-    email: '',
-    tel: '',
-    birthDate: moment().format('YYYY-MM-DD'),
-    verified: { email: false, tel: false },
-    role: '0000',
-  },
+  data: initialData,
   idChecked: false,
   error: null,
   saved: null,
@@ -135,11 +136,14 @@ const signupSlice = createSlice({
   name: 'signup',
   initialState,
   reducers: {
-    initialize: () => ({ ...initialState }),
-    setToggle: (state) => ({
+    initialize: (state) => ({
+      ...initialState,
+      data: { ...initialData, role: state.data.role },
+    }),
+    setRole: (state, action) => ({
       ...state,
       bManager: !state.bManager,
-      data: { ...state.data, role: !state.bManager ? '0110' : '0000' },
+      data: { ...state.data, role: action.payload },
     }),
     setParams: (state, action) => ({
       ...state,
@@ -203,7 +207,7 @@ export const {
   setParams,
   setClear,
   setError,
-  setToggle,
+  setRole,
   initChecked,
 } = actions;
 

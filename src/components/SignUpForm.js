@@ -1,11 +1,14 @@
 import {
   Button,
-  FormGroup,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   Grid,
   IconButton,
   InputAdornment,
+  Radio,
+  RadioGroup,
   TextField,
-  Typography,
 } from '@mui/material';
 import React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
@@ -13,13 +16,11 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import EnvSelect from './EnvSelect';
-import AntSwitch from './AntSwitch';
 
 const SignUpForm = ({
   classes,
   error,
   data,
-  bManager,
   idChecked,
   visible,
   enable,
@@ -27,8 +28,8 @@ const SignUpForm = ({
   handleVisible,
   handleBlur,
   handleChange,
-  handleToggleChange,
   handleDuplicateCheck,
+  handleRadioChange,
 }) => (
   <Grid
     container
@@ -42,27 +43,26 @@ const SignUpForm = ({
       <EnvSelect />
     </Grid>
     <Grid item xs={6} md={8} className={classes.toggleWrap}>
-      <FormGroup>
-        <Typography component="div">
-          <Grid
-            component="label"
-            container
-            item
-            alignItems="center"
-            spacing={1}
-          >
-            <Grid item>일반</Grid>
-            <Grid item>
-              <AntSwitch
-                checked={bManager}
-                onChange={handleToggleChange}
-                className={classes.switch}
-              />
-            </Grid>
-            <Grid item>매니저</Grid>
-          </Grid>
-        </Typography>
-      </FormGroup>
+      <FormControl sx={{ flexDirection: 'row', alignItems: 'center' }}>
+        <FormLabel id="types-buttons-group-label" sx={{ mr: 2 }}>
+          구분
+        </FormLabel>
+        <RadioGroup
+          row
+          aria-labelledby="types-buttons-group-label"
+          name="types-radio-buttons-group"
+          onChange={handleRadioChange}
+          defaultValue={data.role}
+        >
+          <FormControlLabel value="0000" control={<Radio />} label="일반" />
+          <FormControlLabel value="0110" control={<Radio />} label="매니저" />
+          <FormControlLabel
+            value="1110"
+            control={<Radio />}
+            label="매니저 관리자"
+          />
+        </RadioGroup>
+      </FormControl>
     </Grid>
     <Grid item container xs={12} className={classes.margin} spacing={2}>
       <Grid item xs={6}>
@@ -196,6 +196,19 @@ const SignUpForm = ({
           fullWidth
         />
       </Grid>
+      {['0110', '1110'].includes(data.role) && (
+        <Grid item xs={6}>
+          <TextField
+            id="institution"
+            name="institution"
+            type="institution"
+            label="기관명"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            fullWidth
+          />
+        </Grid>
+      )}
       <Grid item xs={12} className={classes.margin}>
         <Button
           variant="contained"

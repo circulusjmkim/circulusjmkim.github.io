@@ -4,9 +4,11 @@
 import moment from 'moment';
 // import { dataURItoBlob } from './common';\
 
-export const MAIL_REGEXP = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+export const MAIL_REGEXP =
+  /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 export const TEL_REGEXP = /^0([1|7])([0|1|6|7|8|9|0]?)?([0-9]{7,8})$/g;
-export const PW_REGEXP = /(((?=.*[a-zA-Z])(?=.*\d))|((?=.*[a-zA-Z])(?=.*[-~!@#$%^&*_+=;:,.?]))|((?=.*\d)(?=.*[-~!@#$%^&*_+=;:,.?]))|((?=.*[a-z])(?=.*[A-Z])))[A-Za-z\d-~!@#$%^&*_+=;:,.?]{8,20}$/;
+export const PW_REGEXP =
+  /(((?=.*[a-zA-Z])(?=.*\d))|((?=.*[a-zA-Z])(?=.*[-~!@#$%^&*_+=;:,.?]))|((?=.*\d)(?=.*[-~!@#$%^&*_+=;:,.?]))|((?=.*[a-z])(?=.*[A-Z])))[A-Za-z\d-~!@#$%^&*_+=;:,.?]{8,20}$/;
 export const ID_REGEXP = /(^[a-zA-Z]+[a-zA-Z0-9._-]+[a-zA-Z0-9]{1,12}$)/g;
 
 export const validateId = (value) => {
@@ -24,25 +26,24 @@ export const validateId = (value) => {
     return '아이디에는 영문(소문자, 대문자), 숫자, - , _ , . 의 문자만 사용 가능합니다.';
   }
   return false;
-}
+};
 
 export const validatePassword = (value) => {
   if (!new RegExp(PW_REGEXP, 'g').test(value)) {
     return '비밀번호는 영문, 숫자 및 특수문자(~!@#$%^&*_-+=;:,.?)를 조합하여 8~20자 이하로 입력해야 합니다.';
   }
   return '';
-}
+};
 
 export const validateComparePassword = (value, compareValue) => {
   if (compareValue && compareValue.length > 0 && value !== compareValue) {
     return '비밀번호가 일치하지 않습니다.';
   }
   return '';
-}
+};
 
 export const validateName = (value, item) => {
-  const target =
-    item === 'lastName' ? '성' : '이름';
+  const target = item === 'lastName' ? '성' : '이름';
   if (!value) {
     return `${target}을 입력해주세요.`;
   }
@@ -57,9 +58,9 @@ export const validateName = (value, item) => {
   return '';
 };
 
-export const validateNick = value => {
+export const validateNick = (value) => {
   if (!value) {
-    return '닉네임을 입력해주세요.'
+    return '닉네임을 입력해주세요.';
   }
   const expression = '^[a-zA-Z가-힣0-9_-]+$';
   const nameRegExp = new RegExp(expression, 'ig');
@@ -72,7 +73,7 @@ export const validateNick = value => {
   return '';
 };
 
-export const validateBirthDate = value => {
+export const validateBirthDate = (value) => {
   if (!value) {
     return '생년월일을 선택하세요.';
   }
@@ -87,15 +88,14 @@ export const validateBirthDate = value => {
 export const validateTel = (data) => {
   let tel;
   let verified = false;
-  if('value' in data)
-  {
+  if ('value' in data) {
     tel = data.value;
-  }else if('tel' in data) {
+  } else if ('tel' in data) {
     tel = data.tel;
   }
   if (!tel && 'verified' in data) {
     verified = data.verified.email;
-    if(!verified) {
+    if (!verified) {
       return '문자 수신이 가능한 전화번호를 입력하세요.';
     }
     return '';
@@ -110,15 +110,15 @@ export const validateTel = (data) => {
 export const validateEmail = (data) => {
   let email;
   let verified = false;
-  if('value' in data)
-  {
+  if ('value' in data) {
     email = data.value;
-  }else if('email' in data) {
+  } else if ('email' in data) {
     email = data.email;
   }
-  if (!email && 'verified' in data) {
+  if (!email) return '';
+  if ('verified' in data) {
     verified = data.verified.tel;
-    if(!verified) {
+    if (!verified) {
       return '유효한 메일 형식이 아닙니다.';
     }
     return '';
@@ -130,7 +130,7 @@ export const validateEmail = (data) => {
   return '';
 };
 
-export const validateInterest = value => {
+export const validateInterest = (value) => {
   if (value.length === 0) {
     return '관심사를 1개 이상 선택하세요.';
   }
@@ -214,26 +214,26 @@ export const validateInfos = async ({ value, name }) => {
   }
   if (!msg && name === 'email') {
     const { email, verified, sent } = value;
-    if (email && (verified && !verified.email) && !sent) {
+    if (email && verified && !verified.email && !sent) {
       return { verified: { email: '메일 인증을 요청하세요.' } };
     }
-    if (sent && (verified && !verified.email)) {
+    if (sent && verified && !verified.email) {
       return { verified: { email: '메일 인증을 완료하세요.' } };
     }
   }
   if (!msg && name === 'tel') {
     const { tel, verified, sent } = value;
-    if (tel && (verified && !verified.tel) && !sent) {
+    if (tel && verified && !verified.tel && !sent) {
       return { verified: { tel: '전화번호 인증을 요청하세요.' } };
     }
-    if (sent && (verified && !verified.tel)) {
+    if (sent && verified && !verified.tel) {
       return { verified: { tel: '전화번호 인증을 완료하세요.' } };
     }
   }
   return { [name]: msg };
 };
 
-export const validateAll = async user => {
+export const validateAll = async (user) => {
   let msg = '';
   if (user) {
     const {

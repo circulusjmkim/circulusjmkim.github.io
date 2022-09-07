@@ -7,7 +7,7 @@ import {
   checkId,
   checkInfo,
   initialize,
-  setToggle,
+  setRole,
   signUp,
   textChange,
 } from '../features/signup';
@@ -29,10 +29,6 @@ const UserSignupContainer = () => {
     dispatch(textChange(e));
   };
 
-  const handleToggleChange = () => {
-    dispatch(setToggle());
-  };
-
   const handleBlur = (e) => {
     const { name, value } = e.target;
     if (value) {
@@ -46,6 +42,11 @@ const UserSignupContainer = () => {
 
   const handleVisible = () => {
     setVisible(!visible);
+  };
+
+  const handleRadioChange = (e) => {
+    console.log(e.target.value);
+    dispatch(setRole(e.target.value));
   };
 
   useUpdateEffect(() => {
@@ -99,7 +100,7 @@ const UserSignupContainer = () => {
             handleVisible,
             handleBlur,
             handleChange,
-            handleToggleChange,
+            handleRadioChange,
             handleDuplicateCheck,
           }}
         />
